@@ -11,8 +11,9 @@
   <!-- Bootstrap icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
 
-  <!-- my css -->
+  <!-- my css, after the others to override -->
   <link rel="stylesheet" href="{% static 'wikis/main.css' %}">
+
   {% if title %}
 		<title>Ben Clingenpeel - {{ title }}</title>
 	{% else %}
@@ -24,13 +25,53 @@
 
 	<!-- nav bar -->
 	<header class="site-header">
-	  <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+	  <nav class="navbar navbar-expand-md navbar-dark bg-green">
 	    <div class="container">
-	      <a class="navbar-brand mr-4" href="#">Ben Clingenpeel</a>
-        <div class="navbar-nav mr-auto">
-          <a class="nav-item nav-link" href="#">Home</a>
-          <a class="nav-item nav-link" href="#">About</a>
-        </div>
+	      <a class="navbar-brand mr-4" href="{% url 'homepage' %}">Ben Clingenpeel</a>
+	      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggle">
+	      <span class="navbar-toggler-icon"></span>
+	      </button>
+	      <div class="collapse navbar-collapse" id="navbarToggle">
+		      <div class="navbar-nav me-auto">
+		      	{% if user.is_authenticated %}
+			      	<a class="nav-item nav-link" href="#">Secret</a>
+			      	{% if user.username == 'benclingenpeel' %}
+			      		<a class="nav-item nav-link" href="#">New Post</a> 
+			      	{% endif %}
+			      	<a class="nav-item nav-link" href="#">Log Out</a>
+		        {% endif %}
+		      </div>
+	        <ul class="navbar-nav ms-auto">
+	        	<li class="nav-item">
+	          	<a class="nav-link" href="#">About</a>
+	          </li>
+	          <li class="nav-item dropdown">
+	          	<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button">Math</a>
+		          <ul class="dropdown-menu">
+		          	<li><a class="dropdown-item" href="#">Animations</a></li>
+		          	<li><a class="dropdown-item" href="#">Posts</a></li>
+		          	{% if user.username == 'benclingenpeel' %}
+		          		<li><a class="dropdown-item" href="#">Problems and Solutions</a></li>
+		          	{% endif %}
+		          	<li><a class="dropdown-item" href="#">Research</a></li>
+		          	<li><a class="dropdown-item" href="#">Math Wiki</a></li>
+		          </ul>
+	          </li>
+	          <li class="nav-item dropdown">
+	          	<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button">Personal</a>
+	          	<ul class="dropdown-menu">
+	          		<li><a class="dropdown-item" href="#">Birds</a></li>
+	          		<li><a class="dropdown-item" href="https://github.com/bncling">GitHub</a></li>
+	          		{% if not user.is_authenticated %}
+	          			<li><a class="dropdown-item" href="#">Log In</a></li>
+	          		{% endif %}
+	          	</ul>
+	          </li>
+	          <li class="nav-item">
+	          	<a class="nav-link" href="#">CV</a>
+	          </li>
+	        </ul>
+	      </div>
 	     </div>
 		</nav>
 	</header>
