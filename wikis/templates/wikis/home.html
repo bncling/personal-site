@@ -1,6 +1,17 @@
 {% extends "wikis/base.html" %}
+{% load static %}
 {% block content %}
-	<h1>Testing...</h1>
-	<h3>\[\int_{-\infty}^\infty e^{-x^2} \, dx = \sqrt{\pi}\]</h3>
-	<p>This is some test text and a <a href="#">link</a>, and then $\text{this is text in math mode}$</p>
+	<section class="mt-5">
+		<div class="container">
+			<div class="d-sm-flex align-items-center justify-content-between">
+				<div class="p-3">
+					<h1>Welcome to my website!</h1>
+					<p>You can find my CV here, some of my writing, and lots of miscellaneous things. I've also been finding it helpful to write small wiki-style posts for the various math things I come across, so you can find those here as well.</p>
+					<button class="btn btn-green">Show me a random math wiki!</button>
+				</div>
+				<div class="p-4"></div>
+				<img class="img-thumbnail w-50 d-none d-md-block p-2" src="{% static 'wikis/me_photo.png' %}">
+			</div>
+		</div>
+	</section>
 {% endblock content %}

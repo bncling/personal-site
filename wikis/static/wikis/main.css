@@ -1,7 +1,10 @@
 :root {
-  --main-green: #6b9080;
+  --header-green: #6b9080;
   --main-background: #f4f9f5;
-  --strong-green: #279055; 
+  --fun-green: #279055; 
+  --chill-green: #519872;
+  --chill-darker: #418862;
+  --chill-lighter: #a4c3b2;
   --secondary: rgba(4, 16, 9, .56); 
   --tertiary: rgba(4, 16, 9, .1);
 }
@@ -10,25 +13,33 @@ body {
   background: var(--main-background);
 }
 
-h1, h2, h3, h4, h5, h6 {
-  color: #333333;
+h1 {
+  color: #34252f;
+}
+
+h2 {
+  color: var(--chill-green);
 }
 
 a {
-  color: var(--main-green);
+  color: var(--header-green);
   text-decoration: none;
 }
 
 a:hover {
-  color: var(--strong-green);
+  color: var(--fun-green);
 }
 
 ul {
   margin: 0;
 }
 
+img {
+  max-width: 200;
+}
+
 .bg-green {
-  background-color: var(--main-green);
+  background-color: var(--header-green);
 }
 
 .site-header .navbar-nav .nav-link {
@@ -43,12 +54,26 @@ ul {
   font-weight: 500;
 }
 
+.btn-green {
+  color: var(--main-background);
+  background-color: var(--chill-green);
+}
+
+.btn-green:hover {
+  color: var(--main-background);
+  background-color: var(--chill-darker);
+}
+
+.dropdown-menu li a:active {
+  background-color: var(--chill-green);
+}
+
 .katex-display {
   overflow-x: auto;
   overflow-y: hidden;
 }
 
 .katex {
-    font: normal 1.15em KaTeX_Main,Times New Roman,serif;
+    font: normal 1.15em KaTeX_Main;
 }
 
