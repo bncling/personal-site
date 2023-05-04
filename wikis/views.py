@@ -17,3 +17,8 @@ class WikiListView(ListView):
 	template_name = "wikis/wiki.html"
 	context_object_name = "wikis"
 	ordering = ["-date_posted"]
+
+	def get_context_data(self, *args, **kwargs):
+		context = super(WikiListView, self).get_context_data(*args, **kwargs)
+		context['title'] = "Math Wiki"
+		return context

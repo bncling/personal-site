@@ -77,3 +77,16 @@ img {
     font: normal 1.15em KaTeX_Main;
 }
 
+.border-white {
+  border-color: #ffffff;
+}
+
+.text-gray {
+  color: #555555;
+}
+
+.small-date {
+  font-size: .2em;
+  text-color: #555555;
+}
+
