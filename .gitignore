@@ -5,6 +5,7 @@
 .env
 db.sqlite3
 db.sqlite3-journal
+wikis/templates/wikis/birdMap.html
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
