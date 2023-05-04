@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.views.generic import ListView
+from .models import Wiki
 
 # Create your views here.
 def homepage(request):
@@ -9,3 +11,9 @@ def about(request):
 
 def birds(request):
 	return render(request, "wikis/birdMap.html", {"title": "Birds"})
+
+class WikiListView(ListView):
+	model = Wiki
+	template_name = "wikis/wiki.html"
+	context_object_name = "wikis"
+	ordering = ["-date_posted"]
