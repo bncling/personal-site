@@ -1,0 +1,30 @@
+{% extends 'wikis/base.html' %}
+{% load static %}
+{% block content %}
+	<section class="mt-5">
+		<div class="container">
+			<div class="row g-4">
+				<div class="col-6">
+					<h1>Hello!</h1>
+					<p>I'm a first year graduate student at George Washington University working on a PhD in mathematics. When I'm not doing math, I enjoy playing the piano, cooking, going for walks, and playing bridge.</p>
+					<hr></hr>
+					<h4>Education</h4>
+					<hr></hr>
+					<p><b>George Washington University</b> | PhD in mathematics, expected 2028
+					<p><b>Georgetown University</b> | Bachelor of Science in mathematics with a minor in Russian, 2023</p>
+					<hr></hr>
+					<h4>Contact</h4>
+					<hr></hr>
+					<ul>
+						<li>Email: <a href="mailto:benclingenpeel@gmail.com">benclingenpeel@gmail.com</a></li>
+						<li>Phone: (734) 883-4542</li>
+					</ul>
+				</div>
+				<div class="col-1"></div>
+				<div class="col-4 text-center">
+					<img class="img-thumbnail w-200 d-none d-md-block p-2" src="{% static 'wikis/about_photo.png' %}">
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock content %}
