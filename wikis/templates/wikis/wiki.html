@@ -1,5 +1,6 @@
 {% extends 'wikis/base.html' %}
 {% load markdownify %}
+{% load list_preview %}
 {% block content %}
 
 	<section class="mt-5">
@@ -19,7 +20,10 @@
 					<div class="col-10">
 						<div class="card border-white px-4 pt-4 pb-2">
 							<h3 class="px-2 pt-1"><b>{{ wiki.title }}</b></h3>
-							<small class="text-secondary p-2">{{ wiki.content|markdownify }}{{ wiki.date_posted|date:"F j, Y" }}</small>
+							<div class="px-2 text-secondary">
+								{{ wiki.content|no_tex|markdownify|truncatewords_html:50|replace_tex:wiki.content|safe }}
+							</div>
+							<p style="font-size: .7em;" class="text-secondary px-2">{{ wiki.date_posted|date:"F j, Y" }}</p>
 						</div>
 					</div>
 					<div class="col-1"></div>

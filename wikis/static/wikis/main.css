@@ -22,7 +22,7 @@ h2, h3, h4, h5, h6 {
 }
 
 a {
-  color: var(--header-green);
+  color: var(--chill-green);
   text-decoration: none;
 }
 
@@ -81,12 +81,15 @@ img {
   border-color: #ffffff;
 }
 
-.text-gray {
-  color: #555555;
+/*
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical; 
+  overflow: hidden; 
 }
 
-.small-date {
-  font-size: .2em;
-  text-color: #555555;
-}
+.line-clamp > h2, h4, h5, h6 {
+  font-size: 1em;
+} */
 

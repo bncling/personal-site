@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "wikis.apps.WikisConfig",
-    "markdownify.apps.MarkdownifyConfig"
+    "markdownify.apps.MarkdownifyConfig",
 ]
 
 MIDDLEWARE = [
@@ -115,9 +115,9 @@ MARKDOWNIFY = {
             'acronym',
             'b',
             'blockquote',
-            'em',
             'i',
             'li',
+            'em',
             'ol',
             'p',
             'strong',
