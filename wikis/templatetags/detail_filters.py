@@ -10,12 +10,13 @@ def no_tex(content):
 	tex_regex = re.compile(r'(\$+.*?\$+)')
 	return re.sub(tex_regex, r'@@', content)
 
+
 @register.filter
 def replace_tex(content, original):
 	tex_regex = re.compile(r'(\$+.*?\$+)')
 	tex_list = re.findall(tex_regex, original)
-	content = re.sub(re.compile(r'<h2>'), r'<h6 class="card-subtitle mb-2 text-secondary">', content)
-	content = re.sub(re.compile(r'<p>'), r'<p style="font-size: .8em">', content)
+	content = re.sub(re.compile(r'<h2>'), r'<p></p><h3>', content)
+	content = re.sub(re.compile(r'<h4>'), r'<p></p><h4>', content)
 	print(content)
 	split_content = content.split('@@')
 	new_content = ''

@@ -1,5 +1,8 @@
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import (
+	ListView,
+	DetailView,
+)
 from .models import Wiki
 
 # Create your views here.
@@ -22,3 +25,6 @@ class WikiListView(ListView):
 		context = super(WikiListView, self).get_context_data(*args, **kwargs)
 		context['title'] = "Math Wiki"
 		return context
+
+class WikiDetailView(DetailView):
+	model = Wiki
