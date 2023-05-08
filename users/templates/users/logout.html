@@ -1,0 +1,18 @@
+{% extends "wikis/base.html" %}
+{% block content %}
+<section class="p-5">
+		<div class="container">
+			<div class="row">
+				<div class="col-1"></div>
+				<div class="col-5">
+					<h1>You have been logged out.</h1>
+						<div class="border-top pt-3">
+							<small class="text-muted">
+								<a href="{% url 'login' %}">Log in again</a>
+							</small>
+						</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock content %}

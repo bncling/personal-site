@@ -36,7 +36,7 @@
 			      	{% if user.username == 'benclingenpeel' %}
 			      		<a class="nav-item nav-link" href="#">New Post</a> 
 			      	{% endif %}
-			      	<a class="nav-item nav-link" href="#">Log Out</a>
+			      	<a class="nav-item nav-link" href="{% url 'logout' %}">Log Out</a>
 		        {% endif %}
 		      </div>
 	        <ul class="navbar-nav ms-auto">
