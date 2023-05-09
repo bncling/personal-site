@@ -47,7 +47,7 @@
 	          	<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button">Math</a>
 		          <ul class="dropdown-menu">
 		          	<li><a class="dropdown-item" href="#">Animations</a></li>
-		          	<li><a class="dropdown-item" href="#">Posts</a></li>
+		          	<li><a class="dropdown-item" href="{% url 'posts' %}">Posts</a></li>
 		          	{% if user.username == 'benclingenpeel' %}
 		          		<li><a class="dropdown-item" href="#">Problems and Solutions</a></li>
 		          	{% endif %}

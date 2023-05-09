@@ -1,0 +1,21 @@
+{% extends 'wikis/base.html' %}
+{% load static %}
+{% load detail_filters %}
+{% load markdownify %}
+{% block content %}
+	<body style="background-color: #ffffff;">
+		<section class="mt-5">
+			<div class="row">
+				<div class="col-2"></div>
+				<div class="col-8">
+					<h2><b>{{ object.title }}</b></h2>
+					<div>
+						{{ object.content|no_tex|markdownify|replace_tex:object.content|safe }}
+					</div>
+				</div>
+				<div class="col-2"></div>
+			</div>
+		</section>
+		<section class="p-4"></section>
+	</body>
+{% endblock content %}

@@ -131,11 +131,13 @@ MARKDOWNIFY = {
             'h4',
             'h5',
             'h6',
+            'img',
         ],
         "WHITELIST_ATTRS": [
             'href',
             'src',
             'alt',
+            'width'
         ],
         "WHITELIST_STYLES": [
             'color',

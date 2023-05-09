@@ -1,0 +1,37 @@
+{% extends 'wikis/base.html' %}
+{% load markdownify %}
+{% load list_preview %}
+{% block content %}
+
+	<section class="mt-5">
+		<div class="container">
+			<div class="row px-5">
+				<h1><b>Math Posts</b></h1>
+				<p>This will eventually be a collection of miscellaneous math-related writings, though right now the only thing I have up here is an elliptic curve cryptography explainer I wrote for a writing class at Georgetown.</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="mt-5">
+		<div class="container">
+			{% for post in posts %}
+				<div class="row p-2">
+					<div class="col-1"></div>
+					<div class="col-10">
+						<div class="card border-white px-4 pt-4 pb-2">
+							<h3 class="px-2 pt-1"><b><a href="{% url 'post-detail' post.id %}">{{ post.title }}</a></b></h3>
+							<div class="px-2 text-secondary">
+								{{ post.content|no_tex|markdownify|truncatewords_html:60|replace_tex:post.content|safe }}
+							</div>
+							<p style="font-size: .7em;" class="text-secondary px-2">{{ post.date_posted|date:"F j, Y" }}</p>
+						</div>
+					</div>
+					<div class="col-1"></div>
+				</div>
+			{% endfor %}
+		</div>
+	</section>
+
+	<section class="mt-5"></section>
+
+{% endblock content %}
