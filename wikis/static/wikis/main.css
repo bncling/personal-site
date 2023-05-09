@@ -34,10 +34,6 @@ ul {
   margin: 0;
 }
 
-img {
-  max-width: 200;
-}
-
 .bg-green {
   background-color: var(--header-green);
 }

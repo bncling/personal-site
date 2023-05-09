@@ -132,16 +132,22 @@ MARKDOWNIFY = {
             'h5',
             'h6',
             'img',
+            'center',
         ],
         "WHITELIST_ATTRS": [
             'href',
             'src',
             'alt',
-            'width'
+            'width',
+            'style',
         ],
         "WHITELIST_STYLES": [
             'color',
             'font-weight',
+            'max-height',
+            'max-width',
+            'height',
+            'weight'
         ]
     }
 }

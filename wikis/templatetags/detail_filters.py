@@ -13,8 +13,9 @@ def no_tex(content):
 
 	# find and modify photo paths
 	photo_regex = re.compile(r'!\[(.*?)\]\((.*?)\)')
-	content = re.sub(photo_regex, r'<img src="/static/wikis/post_photos/\2" alt = "\1" width="100%">', content)
+	content = re.sub(photo_regex, r'<center><img src="/static/wikis/post_photos/\2" alt = "\1" style="max-height: 400px; max-width: 800px; height: auto; weight: auto;"></center>', content)
 
+	print(content)
 	return content
 
 
