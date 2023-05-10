@@ -15,7 +15,6 @@ def no_tex(content):
 	photo_regex = re.compile(r'!\[(.*?)\]\((.*?)\)')
 	content = re.sub(photo_regex, r'<center><img src="/static/wikis/post_photos/\2" alt = "\1" style="max-height: 400px; max-width: 800px; height: auto; weight: auto;"></center>', content)
 
-	print(content)
 	return content
 
 
@@ -31,7 +30,6 @@ def replace_tex(content, original):
 		tex_list.append(tex_of_interest)
 	content = re.sub(re.compile(r'<h2>'), r'<p></p><h3>', content)
 	content = re.sub(re.compile(r'<h4>'), r'<p></p><h4>', content)
-	print(content)
 	split_content = content.split('@@')
 	new_content = ''
 	for i in range(min(len(split_content) - 1, len(tex_list))):
