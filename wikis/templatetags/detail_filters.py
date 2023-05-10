@@ -11,10 +11,26 @@ def no_tex(content):
 	tex_regex = re.compile(r'((\$+|\\begin\{(.*?)\}).*?(\$+|\\end\{\3\}))', re.S)
 	content = re.sub(tex_regex, r'@@', content)
 
-	# find and modify photo paths
+	return content
+
+
+@register.filter
+def post_photo_link(content):
+	# find and modify photo paths for posts
 	photo_regex = re.compile(r'!\[(.*?)\]\((.*?)\)')
 	content = re.sub(photo_regex, r'<center><img src="/static/wikis/post_photos/\2" alt = "\1" style="max-height: 400px; max-width: 800px; height: auto; weight: auto;"></center>', content)
+	link_regex = re.compile(r'\[(.*?)\]\((.*?)\)')
+	content = re.sub(link_regex, r'[\1](/posts/\2)', content)
+	return content
 
+
+@register.filter
+def wiki_photo_link(content):
+	# find and modify photo paths for posts
+	photo_regex = re.compile(r'!\[(.*?)\]\((.*?)\)')
+	content = re.sub(photo_regex, r'<center><img src="/static/wikis/wiki_photos/\2" alt = "\1" style="max-height: 400px; max-width: 800px; height: auto; weight: auto;"></center>', content)
+	link_regex = re.compile(r'\[(.*?)\]\((.*?)\)')
+	content = re.sub(link_regex, r'[\1](/wiki/\2)', content)
 	return content
 
 
