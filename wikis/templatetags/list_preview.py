@@ -18,7 +18,7 @@ def no_tex(content):
 def post_photo(content):
 	# find and modify photo paths for posts
 	photo_regex = re.compile(r'!\[(.*?)\]\((.*?)\)')
-	content = re.sub(photo_regex, r'<center><img src="/static/wikis/post_photos/\2" alt = "\1" style="max-height: 400px; max-width: 800px; height: auto; weight: auto;"></center>', content)
+	content = re.sub(photo_regex, r'<center><img src="/static/wikis/post_photos/\2" alt = "\1" style="max-height: 300px; max-width: 600px; height: auto; width: auto;"></center>', content)
 
 	return content
 
@@ -27,7 +27,7 @@ def post_photo(content):
 def wiki_photo(content):
 	# find and modify photo paths for posts
 	photo_regex = re.compile(r'!\[(.*?)\]\((.*?)\)')
-	content = re.sub(photo_regex, r'<center><img src="/static/wikis/wiki_photos/\2" alt = "\1" style="max-height: 400px; max-width: 800px; height: auto; weight: auto;"></center>', content)
+	content = re.sub(photo_regex, r'<center><img src="/static/wikis/wiki_photos/\2" alt = "\1" style="max-height: 300px; max-width: 600px; height: auto; width: auto;"></center>', content)
 
 	return content
 

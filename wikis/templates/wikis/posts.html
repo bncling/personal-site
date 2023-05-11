@@ -21,7 +21,7 @@
 						<div class="card border-white px-4 pt-4 pb-2">
 							<h3 class="px-2 pt-1"><b><a href="{% url 'post-detail' post.slug %}">{{ post.title }}</a></b></h3>
 							<div class="px-2 text-secondary">
-								{{ post.content|no_tex|post_photo_link|markdownify|truncatewords_html:60|replace_tex:post.content|safe }}
+								{{ post.content|no_tex|post_photo|markdownify|truncatewords_html:60|replace_tex:post.content|safe }}
 							</div>
 							<p style="font-size: .7em;" class="text-secondary px-2">{{ post.date_posted|date:"F j, Y" }}</p>
 						</div>

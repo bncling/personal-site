@@ -49,7 +49,7 @@
 		          	<li><a class="dropdown-item" href="#">Animations</a></li>
 		          	<li><a class="dropdown-item" href="{% url 'posts' %}">Posts</a></li>
 		          	{% if user.username == 'benclingenpeel' %}
-		          		<li><a class="dropdown-item" href="#">Problems and Solutions</a></li>
+		          		<li><a class="dropdown-item" href="{% url 'problems' %}">Problems and Solutions</a></li>
 		          	{% endif %}
 		          	<li><a class="dropdown-item" href="#">Research</a></li>
 		          	<li><a class="dropdown-item" href="{% url 'wiki' %}">Math Wiki</a></li>

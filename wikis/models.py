@@ -20,3 +20,14 @@ class Post(models.Model):
 
 	def __str__(self):
 		return self.title
+
+
+class MathBook(models.Model):
+	title = models.CharField(max_length = 150)
+	author = models.CharField(max_length = 150)
+	year_used = models.DateTimeField(default = timezone.now)
+	image_link = models.TextField()
+	file_link = models.TextField()
+
+	def __str__(self):
+		return self.title

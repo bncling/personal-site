@@ -1,9 +1,10 @@
 from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (
 	ListView,
 	DetailView,
 )
-from .models import Wiki, Post
+from .models import Wiki, Post, MathBook
 
 # Create your views here.
 def homepage(request):
@@ -48,3 +49,20 @@ class PostListView(ListView):
 
 class PostDetailView(DetailView):
 	model = Post
+
+
+class TextbookListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+	model = MathBook
+	template_name = "wikis/problems.html"
+	context_object_name = "textbooks"
+	ordering = ["-year_used"]
+
+	def get_context_data(self, *args, **kwargs):
+		context = super(TextbookListView, self).get_context_data(*args, **kwargs)
+		context['title'] = "Problems and Solutions"
+		return context
+
+	def test_func(self):
+		if self.request.user.username == "benclingenpeel":
+			return True
+		return False
