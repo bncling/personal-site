@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (
 	ListView,
@@ -17,6 +19,13 @@ def about(request):
 
 def birds(request):
 	return render(request, "wikis/birdMap.html", {"title": "Birds"})
+
+@login_required
+def secret(request):
+	if request.user.username in ['benclingenpeel', 'nina']:
+		return render(request, "wikis/secret.html", {"title": "Secret Page"})
+	else:
+		raise PermissionDenied
 
 
 class WikiListView(ListView):

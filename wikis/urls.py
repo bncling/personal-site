@@ -15,5 +15,6 @@ urlpatterns = [
 	path("wiki/<slug:slug>/", views.WikiDetailView.as_view(), name = "wiki-detail"),
 	path("posts/", views.PostListView.as_view(), name = "posts"),
 	path("posts/<slug:slug>/", views.PostDetailView.as_view(), name = "post-detail"),
-	path("problems_and_solutions/", views.TextbookListView.as_view(), name = "problems")
+	path("problems_and_solutions/", views.TextbookListView.as_view(), name = "problems"),
+	path("secret/", views.secret, name = "secret")
 ]
