@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (
 	ListView,
 	DetailView,
+	CreateView
 )
 from .models import Wiki, Post, MathBook
 
@@ -42,6 +43,15 @@ class WikiListView(ListView):
 
 class WikiDetailView(DetailView):
 	model = Wiki
+
+
+class WikiCreateView(LoginRequiredMixin, CreateView):
+	model = Wiki 
+	fields = ["title", "slug", "content"]
+
+	def form_valid(self, form):
+		form.instance.author = self.request.user
+		return super().form_valid(form)
 
 
 class PostListView(ListView):

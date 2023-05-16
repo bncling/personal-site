@@ -2,6 +2,7 @@ from django.urls import path, re_path
 from .views import (
 	WikiListView,
 	WikiDetailView,
+	WikiCreateView,
 	PostListView,
 	PostDetailView
 )
@@ -13,6 +14,7 @@ urlpatterns = [
 	path("birds/", views.birds, name = "birds"),
 	path("wiki/", views.WikiListView.as_view(), name = "wiki"),
 	path("wiki/<slug:slug>/", views.WikiDetailView.as_view(), name = "wiki-detail"),
+	path("new_wiki", views.WikiCreateView.as_view(), name = 'wiki-create'),
 	path("posts/", views.PostListView.as_view(), name = "posts"),
 	path("posts/<slug:slug>/", views.PostDetailView.as_view(), name = "post-detail"),
 	path("problems_and_solutions/", views.TextbookListView.as_view(), name = "problems"),

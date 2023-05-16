@@ -32,18 +32,30 @@
 	      <span class="navbar-toggler-icon"></span>
 	      </button>
 	      <div class="collapse navbar-collapse" id="navbarToggle">
-		      <div class="navbar-nav me-auto">
+		      <ul class="navbar-nav me-auto">
 		      	{% if user.is_authenticated %}
 		      		{% if user.username == 'nina' %}
-			      		<a class="nav-item nav-link" href="{% url 'secret' %}">Secret</a>
+			      		<li class="nav-item">
+			      			<a class="nav-item nav-link" href="{% url 'secret' %}">Secret</a>
+			      		</li>
 			      	{% endif %}
 			      	{% if user.username == 'benclingenpeel' %}
-			      		<a class="nav-item nav-link" href="{% url 'secret' %}">Secret</a>
-			      		<a class="nav-item nav-link" href="#">New Post</a> 
+			      		<li class="nav-item">
+			      			<a class="nav-item nav-link" href="{% url 'secret' %}">Secret</a>
+			      		</li>
+			      		<li class="nav-item dropdown">
+			      			<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button">New</a>
+				      		<ul class="dropdown-menu">
+				      			<li><a class="dropdown-item" href="#">Post</a></li>
+				      			<li><a class="dropdown-item" href="#">Wiki</a></li>
+				      		</ul>
+			      		</li>
 			      	{% endif %}
-			      	<a class="nav-item nav-link" href="{% url 'logout' %}">Log Out</a>
+			      	<li class="nav-item">
+			      		<a class="nav-item nav-link" href="{% url 'logout' %}">Log Out</a>
+			      	</li>
 		        {% endif %}
-		      </div>
+		      </ul>
 	        <ul class="navbar-nav ms-auto">
 	        	<li class="nav-item">
 	          	<a class="nav-link" href="{% url 'about' %}">About</a>

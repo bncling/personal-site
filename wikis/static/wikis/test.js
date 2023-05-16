@@ -1,5 +1,4 @@
-var originalLocation = 20;
-
+var originalLocation = 0;
 var circleInterval;
 
 function circleAnimation(time) {

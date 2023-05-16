@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.urls import reverse
 
 # Create your models here.
 class Wiki(models.Model):
@@ -10,6 +11,10 @@ class Wiki(models.Model):
 
 	def __str__(self):
 		return self.title
+
+	# for the create post view
+	def get_absolute_url(self):
+		return reverse("wiki-detail", kwargs = {"slug": self.slug})
 
 
 class Post(models.Model):
