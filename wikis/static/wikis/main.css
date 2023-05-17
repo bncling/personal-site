@@ -7,6 +7,10 @@
   --chill-lighter: #a4c3b2;
   --secondary: rgba(4, 16, 9, .56); 
   --tertiary: rgba(4, 16, 9, .1);
+  --danger-red: #d56570;
+  --danger-dark: #bc4749;
+  --update: #778da9;
+  --update-dark: #647495;
 }
 
 body {
@@ -58,6 +62,26 @@ ul {
 .btn-green:hover {
   color: var(--main-background);
   background-color: var(--chill-darker);
+}
+
+.btn-red {
+  color: var(--main-background);
+  background-color: var(--danger-red);
+}
+
+.btn-red:hover {
+  color: var(--main-background);
+  background-color: var(--danger-dark);
+}
+
+.btn-blue {
+  color: var(--main-background);
+  background-color: var(--update);
+}
+
+.btn-blue:hover {
+  color: var(--main-background);
+  background-color: var(--update-dark);
 }
 
 .dropdown-menu li a:active {
