@@ -4,6 +4,7 @@ from .views import (
 	WikiDetailView,
 	WikiCreateView,
 	WikiUpdateView,
+	WikiDeleteView,
 	PostListView,
 	PostDetailView
 )
@@ -17,6 +18,7 @@ urlpatterns = [
 	path("wiki/<slug:slug>/", views.WikiDetailView.as_view(), name = "wiki-detail"),
 	path("new_wiki", views.WikiCreateView.as_view(), name = 'wiki-create'),
 	path("wiki/<slug:slug>/update", views.WikiUpdateView.as_view(), name = "wiki-update"),
+	path("wiki/<slug:slug>/delete", views.WikiDeleteView.as_view(), name = "wiki-delete"),
 	path("posts/", views.PostListView.as_view(), name = "posts"),
 	path("posts/<slug:slug>/", views.PostDetailView.as_view(), name = "post-detail"),
 	path("problems_and_solutions/", views.TextbookListView.as_view(), name = "problems"),

@@ -1,0 +1,25 @@
+{% extends "wikis/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+	<section class="mt-5">
+		<div class="container">
+			<div class="row">
+				<div class="col-1"></div>
+				<div class="col-7">
+					<form method="POST">
+						{% csrf_token %} <!-- this is a required security thing -->
+						<fieldset class="form-group">
+							<h1>Are you sure you want to delete the wiki "{{ object.title }}"?</h1>
+						</fieldset>
+						<div class="form-group">
+							<button class="btn btn-outline-danger" type="submit">Yes, delete</button>
+							<a class="btn btn-outline-sec" href="{% url 'wiki-detail' object.slug %}">Cancel</a>
+						</div>
+					</form>
+				</div>
+				<div class="col-4">
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock content %}

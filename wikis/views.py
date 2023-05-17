@@ -75,6 +75,16 @@ class WikiUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 		return False
 
 
+class WikiDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+	model = Wiki 
+	success_url = "/wiki/"
+
+	def test_func(self):
+		if self.request.user.username == "benclingenpeel":
+			return True
+		return False
+
+
 class PostListView(ListView):
 	model = Post
 	template_name = "wikis/posts.html"
