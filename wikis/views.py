@@ -130,6 +130,16 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 		return False
 
 
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+	model = Post
+	success_url = "/posts/"
+
+	def test_func(self):
+		if self.request.user.username == "benclingenpeel":
+			return True
+		return False
+
+
 class TextbookListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 	model = MathBook
 	template_name = "wikis/problems.html"
