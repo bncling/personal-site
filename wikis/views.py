@@ -23,6 +23,7 @@ def about(request):
 def birds(request):
 	return render(request, "wikis/birdMap.html", {"title": "Birds"})
 
+
 @login_required
 def secret(request):
 	if request.user.username in ['benclingenpeel', 'nina']:
@@ -99,6 +100,20 @@ class PostListView(ListView):
 
 class PostDetailView(DetailView):
 	model = Post
+
+
+class PostCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+	model = Post
+	fields = ["title", "slug", "content"]
+
+	def form_valid(self, form):
+		form.instance.author = self.request.user
+		return super().form_valid(form)
+
+	def test_func(self):
+		if self.request.user.username == "benclingenpeel":
+			return True
+		return False
 
 
 class TextbookListView(LoginRequiredMixin, UserPassesTestMixin, ListView):

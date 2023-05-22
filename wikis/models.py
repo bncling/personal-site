@@ -26,6 +26,10 @@ class Post(models.Model):
 	def __str__(self):
 		return self.title
 
+	# for the create post view
+	def get_absolute_url(self):
+		return reverse("post-detail", kwargs = {"slug": self.slug})
+
 
 class MathBook(models.Model):
 	title = models.CharField(max_length = 150)
