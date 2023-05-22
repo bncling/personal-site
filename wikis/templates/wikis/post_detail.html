@@ -8,7 +8,11 @@
 			<div class="row">
 				<div class="col-2"></div>
 				<div class="col-8">
-					<h2><b>{{ object.title }}</b></h2>
+					{% if user.username == 'benclingenpeel' %}
+						<h2><b>{{ object.title }}</b> <small><a href="{% url 'post-update' object.slug %}"><i class="bi bi-arrow-counterclockwise"></i></a><a href="#"><i class="bi bi-trash-fill"></i></a></small></h2>
+					{% else %}
+						<h2><b>{{ object.title }}</b></h2>
+					{% endif %}
 					<div>
 						{{ object.content|no_tex|post_photo_link|markdownify|replace_tex:object.content|safe }}
 					</div>
