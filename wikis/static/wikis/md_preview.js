@@ -12,12 +12,15 @@ titleArea.addEventListener("keyup", evt => {
 editArea.addEventListener("keyup", evt => {
 	const {value} = evt.target;
 
+	const photo_reg = /!\[(.*?)\]\((.*?)\)/gs;
 	const tex_reg = /(\$+|\\begin\{(.*?)\}).*?(\$+|\\end\{\2\})/gs;
 	tex_array = value.match(tex_reg);
 
 	no_tex = value.replaceAll(tex_reg, '@@');
 
-	marked_text = marked.parse(no_tex, {mangle: false, headerIds: false});
+	with_photos = no_tex.replaceAll(photo_reg, '<center><img src="/static/wikis/post_photos/$2" alt = "$1" style="max-height: 200px; max-width: 400px; height: auto; width: auto;"></center>');
+
+	marked_text = marked.parse(with_photos, {mangle: false, headerIds: false});
 
 	content_array = marked_text.split('@@');
 
