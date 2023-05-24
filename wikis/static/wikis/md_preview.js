@@ -1,3 +1,5 @@
+import latexMacros from './latex_macros.json' assert { type: 'json' };
+
 const titleArea = document.querySelector(".textinput.form-control");
 const previewTitle = document.querySelector(".new-title");
 const editArea = document.querySelector(".textarea.form-control");
@@ -14,22 +16,22 @@ editArea.addEventListener("keyup", evt => {
 
 	const photo_reg = /!\[(.*?)\]\((.*?)\)/gs;
 	const tex_reg = /(\$+|\\begin\{(.*?)\}).*?(\$+|\\end\{\2\})/gs;
-	tex_array = value.match(tex_reg);
+	const tex_array = value.match(tex_reg);
 
-	no_tex = value.replaceAll(tex_reg, '@@');
+	const no_tex = value.replaceAll(tex_reg, '@@');
 
-	with_photos = no_tex.replaceAll(photo_reg, '<center><img src="/static/wikis/post_photos/$2" alt = "$1" style="max-height: 200px; max-width: 400px; height: auto; width: auto;"></center>');
+	const with_photos = no_tex.replaceAll(photo_reg, '<center><img src="/static/wikis/post_photos/$2" alt = "$1" style="max-height: 200px; max-width: 400px; height: auto; width: auto;"></center>');
 
-	marked_text = marked.parse(with_photos, {mangle: false, headerIds: false});
+	const marked_text = marked.parse(with_photos, {mangle: false, headerIds: false});
 
-	content_array = marked_text.split('@@');
+	const content_array = marked_text.split('@@');
 
-	final_text = '';
+	var final_text = '';
 
 	if (tex_array != null) {
 		const iterations = Math.min(content_array.length - 1, tex_array.length);
 
-		for (i = 0; i < iterations; i++) {
+		for (var i = 0; i < iterations; i++) {
 			if (tex_array[i].startsWith('\\')) {
 				tex_array[i] = '$$' + tex_array[i] + '$$';
 			}
@@ -48,59 +50,12 @@ editArea.addEventListener("keyup", evt => {
 editArea.addEventListener("keyup", function() {
     renderMathInElement(preview, {
       	delimiters: [
-	        {left: '$$', right: '$$', display: true},
+	    	{left: '$$', right: '$$', display: true},
 	        {left: '$', right: '$', display: false},
 	        {left: '\\(', right: '\\)', display: false},
 	        {left: '\\[', right: '\\]', display: true}
 	    ],
-	    macros: {
-	        "\\Ts": "\\mathcal{T}_{\\text{std}}",
-	        "\\R":"\\mathbb{R}",
-	        "\\N":"\\mathbb{N}",
-	        "\\Z":"\\mathbb{Z}",
-	        "\\Q":"\\mathbb{Q}",
-	        "\\F":"\\mathbb{F}",
-	        "\\C":"\\mathbb{C}",
-	        "\\Even":"\\mathbb{E}",
-	        "\\Odd":"\\mathbb{O}",
-	        "\\Poly":"\\mathcal{P}",
-	        "\\st":"\\text{ s.t. }",
-	        "\\T":"\\mathcal{T}",
-	        "\\Ts":"\\mathcal{T}_\\text{std}",
-	        "\\Rs":"\\mathbb{R}_\\text{std}",
-	        "\\inv":"^{-1}",
-	        "\\dg":"\\^{circ}",
-	        "\\B":"\\mathscr{B}",
-	        "\\BLL":"\\mathcal{B}_\\text{LL}",
-	        "\\RLL":"\\mathbb{R}_\\text{LL}",
-	        "\\TLL":"\\mathcal{T}_\\text{LL}",
-	        "\\Rh":"\\mathbb{R}_\\text{har}",
-	        "\\Hbub":"\\mathbb{H}_\\text{bub}",
-	        "\\Zar":"\\mathbb{Z}_\\text{arith}",
-	        "\\lcm":"\\text{lcm}",
-	        "\\Sub":"\\mathscr{S}",
-	        "\\Cl":"\\text{Cl}",
-	        "\\Span":"\\text{span}",
-	        "\\Lin":"\\mathcal{L}",
-	        "\\nl":"\\text{null }",
-	        "\\range":"\\text{range }",
-	        "\\M":"\\mathcal{M}",
-	        "\\Sym":"\\text{Sym}",
-	        "\\Aut":"\\text{Aut}",
-	        "\\im":"\\text{im}",
-	        "\\inn":"\\text{Inn}",
-	        "\\id":"\\text{id}",
-	        "\\stirlingI":"\\genfrac{[}{]}{0pt}{}{#1}{#2}",
-	        "\\stirlingII":"\\genfrac{\\{}{\\}}{0pt}{}{#1}{#2}",
-	        "\\Cov":"\\mathscr{C}",
-	        "\\im":"\\text{im}",
-	        "\\pring":"{#1}[{#2}]",
-	        "\\V":"\\mathbf{V}",
-	        "\\I":"\\mathbf{I}",
-	        "\\Tor":"\\mathbb{T}",
-	        "\\Sp":"\\mathbb{S}",
-	        "\\RP":"\\mathbb{R}\\text{P}"
-      	},
+	    macros: latexMacros,
       	throwOnError : false
     });
 });

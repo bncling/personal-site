@@ -100,7 +100,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.css" integrity="sha384-Um5gpz1odJg5Z4HAmzPtgZKdTBHZdw8S29IecapCSB31ligYPhHQZMIlWLYQGVoc" crossorigin="anonymous">
 	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.js" integrity="sha384-YNHdsYkH6gMx9y3mRkmcJ2mFUjTd0qNQQvY9VYZgQd7DcN7env35GzlmFaZ23JGp" crossorigin="anonymous"></script>
 	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous"></script>
-	<script>
+	<script type="module">
+			import latexMacros from '{% static "wikis/latex_macros.json" %}' assert { type: 'json' };
+
 	    document.addEventListener("DOMContentLoaded", function() {
 	        renderMathInElement(document.body, {
 	          // customised options
@@ -111,54 +113,7 @@
 	              {left: '\\(', right: '\\)', display: false},
 	              {left: '\\[', right: '\\]', display: true}
 	          ],
-	          macros: {
-	            "\\Ts": "\\mathcal{T}_{\\text{std}}",
-	            "\\R":"\\mathbb{R}",
-	            "\\N":"\\mathbb{N}",
-	            "\\Z":"\\mathbb{Z}",
-	            "\\Q":"\\mathbb{Q}",
-	            "\\F":"\\mathbb{F}",
-	            "\\C":"\\mathbb{C}",
-	            "\\Even":"\\mathbb{E}",
-	            "\\Odd":"\\mathbb{O}",
-	            "\\Poly":"\\mathcal{P}",
-	            "\\st":"\\text{ s.t. }",
-	            "\\T":"\\mathcal{T}",
-	            "\\Ts":"\\mathcal{T}_\\text{std}",
-	            "\\Rs":"\\mathbb{R}_\\text{std}",
-	            "\\inv":"^{-1}",
-	            "\\dg":"\\^{circ}",
-	            "\\B":"\\mathscr{B}",
-	            "\\BLL":"\\mathcal{B}_\\text{LL}",
-	            "\\RLL":"\\mathbb{R}_\\text{LL}",
-	            "\\TLL":"\\mathcal{T}_\\text{LL}",
-	            "\\Rh":"\\mathbb{R}_\\text{har}",
-	            "\\Hbub":"\\mathbb{H}_\\text{bub}",
-	            "\\Zar":"\\mathbb{Z}_\\text{arith}",
-	            "\\lcm":"\\text{lcm}",
-	            "\\Sub":"\\mathscr{S}",
-	            "\\Cl":"\\text{Cl}",
-	            "\\Span":"\\text{span}",
-	            "\\Lin":"\\mathcal{L}",
-	            "\\nl":"\\text{null }",
-	            "\\range":"\\text{range }",
-	            "\\M":"\\mathcal{M}",
-	            "\\Sym":"\\text{Sym}",
-	            "\\Aut":"\\text{Aut}",
-	            "\\im":"\\text{im}",
-	            "\\inn":"\\text{Inn}",
-	            "\\id":"\\text{id}",
-	            "\\stirlingI":"\\genfrac{[}{]}{0pt}{}{#1}{#2}",
-	            "\\stirlingII":"\\genfrac{\\{}{\\}}{0pt}{}{#1}{#2}",
-	            "\\Cov":"\\mathscr{C}",
-	            "\\im":"\\text{im}",
-	            "\\pring":"{#1}[{#2}]",
-	            "\\V":"\\mathbf{V}",
-	            "\\I":"\\mathbf{I}",
-	            "\\Tor":"\\mathbb{T}",
-	            "\\Sp":"\\mathbb{S}",
-	            "\\RP":"\\mathbb{R}\\text{P}"
-	          },
+	          macros: latexMacros,
 	          // • rendering keys, e.g.:
 	          throwOnError : false
 	        });
