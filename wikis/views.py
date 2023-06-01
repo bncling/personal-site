@@ -32,14 +32,6 @@ def secret(request):
 		raise PermissionDenied
 
 
-@login_required
-def chess(request):
-	if request.user.username == "benclingenpeel":
-		return render(request, "wikis/chess.html", {"title": "Chess"})
-	else:
-		raise PermissionDenied
-
-
 class WikiListView(ListView):
 	model = Wiki
 	template_name = "wikis/wiki.html"

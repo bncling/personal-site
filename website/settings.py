@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     "markdownify.apps.MarkdownifyConfig",
     "users.apps.UsersConfig",
     "crispy_forms", 
-    "crispy_bootstrap5"
+    "crispy_bootstrap5",
+    "chess.apps.ChessConfig"
 ]
 
 MIDDLEWARE = [

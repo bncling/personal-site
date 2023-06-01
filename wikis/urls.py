@@ -1,4 +1,4 @@
-from django.urls import path, re_path
+from django.urls import path, re_path, include
 from .views import (
 	WikiListView,
 	WikiDetailView,
@@ -29,5 +29,5 @@ urlpatterns = [
 	path("posts/<slug:slug>/delete/", views.PostDeleteView.as_view(), name = "post-delete"),
 	path("problems_and_solutions/", views.TextbookListView.as_view(), name = "problems"),
 	path("secret/", views.secret, name = "secret"),
-	path("chess/", views.chess, name = "chess-home")
+	path("chess/", include("chess.urls"))
 ]
