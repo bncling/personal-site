@@ -1,6 +1,10 @@
 // NOTE: this example uses the chess.js library:
 // https://github.com/jhlywa/chess.js
 
+const pgnArea = document.querySelector(".pgn-viewer");
+
+var moveStack = [];
+
 var board = null
 var game = new Chess()
 var $status = $('#status')
@@ -71,12 +75,19 @@ function updateStatus () {
   $pgn.html(game.pgn())
 }
 
+function onChange (oldPos, newPos) {
+	const dividedPGN = game.pgn().split(' ');
+	moveStack.push([dividedPGN.at(-1), game.fen()]);
+	pgnArea.innerHTML = game.pgn();
+}
+
 var config = {
   draggable: true,
   position: 'start',
   onDragStart: onDragStart,
   onDrop: onDrop,
-  onSnapEnd: onSnapEnd
+  onSnapEnd: onSnapEnd,
+  onChange: onChange
 }
 board = Chessboard('testBoard', config)
 
