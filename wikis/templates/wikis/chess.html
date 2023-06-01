@@ -1,0 +1,29 @@
+{% extends "wikis/base.html" %}
+{% load static %}
+{% block content %}
+	<!-- JQuery -->
+	<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+	<!-- Chessboard CSS by Chris Oakman -->
+	<link rel="stylesheet" href="{% static 'wikis/chessboard-1.0.0.css' %}">
+
+	<!-- Chessboard JS by Chris Oakman -->
+  <script type="module" src="{% static 'wikis/chessboard-1.0.0.js' %}"></script>
+
+  <!-- Chess JS by Jeff Hlywa -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js" integrity="sha384-s3XgLpvmHyscVpijnseAmye819Ee3yaGa8NxstkJVyA6nuDFjt59u1QvuEl/mecz" crossorigin="anonymous"></script>
+
+  <!-- Custom JS for logic -->
+  <script type="module" src="{% static 'wikis/chessMain.js' %}"></script>
+
+  <section class="mt-5">
+		<div class="container">
+			<div class="row gx-5">
+				<div class="col-6" id="testBoard"></div>
+				<div class="col-6 bg-white border">
+					<h2 class="mx-3 mt-3"><b>Testing</b></h2>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock content %}

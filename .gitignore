@@ -7,6 +7,9 @@ db.sqlite3
 db.sqlite3-journal
 wikis/templates/wikis/birdMap.html
 wikis/templates/wikis/secret.html
+wikis/static/wikis/chess.js
+wikis/static/wikis/chessboard-1.0.0.css
+wikis/static/wikis/chessboard-1.0.0.js
 
 # photos and pdfs
 *.pdf

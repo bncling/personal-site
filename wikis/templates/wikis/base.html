@@ -76,6 +76,9 @@
 	          	<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button">Personal</a>
 	          	<ul class="dropdown-menu">
 	          		<li><a class="dropdown-item" href="{% url 'birds' %}">Birds</a></li>
+	          		{% if user.username == 'benclingenpeel' %}
+		          		<li><a class="dropdown-item" href="{% url 'chess-home' %}">Chess</a></li>
+		          	{% endif %}
 	          		<li><a class="dropdown-item" href="https://github.com/bncling">GitHub</a></li>
 	          		{% if not user.is_authenticated %}
 	          			<li><a class="dropdown-item" href="{% url 'login' %}">Log In</a></li>
