@@ -1,18 +1,6 @@
 {% extends "chess/base.html" %}
 {% load static %}
 {% block content %}
-	<!-- JQuery -->
-	<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
-
-	<!-- Chessboard CSS by Chris Oakman -->
-	<link rel="stylesheet" href="{% static 'wikis/chessboard-1.0.0.css' %}">
-
-	<!-- Chessboard JS by Chris Oakman -->
-  <script type="module" src="{% static 'wikis/chessboard-1.0.0.js' %}"></script>
-
-  <!-- Chess JS by Jeff Hlywa -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js" integrity="sha384-s3XgLpvmHyscVpijnseAmye819Ee3yaGa8NxstkJVyA6nuDFjt59u1QvuEl/mecz" crossorigin="anonymous"></script>
-
   <!-- Custom JS for logic -->
   <script type="module" src="{% static 'wikis/chessMain.js' %}"></script>
 
@@ -23,7 +11,7 @@
 					<div id="testBoard"></div>
 				</div>
 				<div class="col-4 bg-white border">
-					<h4 class="mx-3 mt-3"><b>Current variation: </b></h4>
+					<h4 class="mx-3 mt-3"><b>Play against random moves</b></h4>
 					<div class="pgn-viewer mx-3 mt-2 mb-3"></div>
 				</div>
 			</div>

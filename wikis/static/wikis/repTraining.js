@@ -1,5 +1,5 @@
-// NOTE: this example uses the chess.js library:
-// https://github.com/jhlywa/chess.js
+import whiteRep from './white-rep.json' assert { type: 'json' };
+import blackRep from './black-rep.json' assert { type: 'json' };
 
 const pgnArea = document.querySelector(".pgn-viewer");
 
@@ -102,19 +102,7 @@ function onSnapEnd () {
   board.position(game.fen())
   displayPGN = game.pgn()
   pgnArea.innerHTML = pgnHighlight(game.pgn());
-
-  if (gameMode == "random") {
-    // make random legal move for black
-    var toMake = getRandomMove();
-    game.move(toMake);
-
-    // add to move log
-    const newDividedPGN = game.pgn().split(' ');
-    moveStack.push([newDividedPGN.at(-1), game.fen()]);
-    board.position(game.fen());
-    displayPGN = game.pgn()
-    pgnArea.innerHTML = pgnHighlight(game.pgn());
-  }
+  console.log(game.fen())
 }
 
 function updateStatus () {
@@ -150,10 +138,6 @@ function updateStatus () {
   $pgn.html(game.pgn())
 }
 
-function onChange (oldPos, newPos) {
-	console.log(moveStack);
-}
-
 function tempBack () {
   for (var i = 0; i < moveStack.length; i++) {
     if (moveStack.at(i)[1] == game.fen()) {
@@ -186,7 +170,6 @@ document.onkeydown = function(e) {
     switch (e.keyCode) {
         case 37:
             tempBack();
-            console.log(game.fen());
             break;
         case 38:
             tempForward();
@@ -205,9 +188,23 @@ var config = {
   position: 'start',
   onDragStart: onDragStart,
   onDrop: onDrop,
-  onSnapEnd: onSnapEnd,
-  //onChange: onChange
+  onSnapEnd: onSnapEnd
 }
 board = Chessboard('testBoard', config)
+
+if (playingColor == "b") {
+  board.orientation("black");
+
+  var firstMoves = blackRep["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"]
+  var randomIdx = Math.floor(Math.random() * firstMoves.length);
+  var firstMove = firstMoves[randomIdx][0];
+  game.move(firstMove)
+  board.position(game.fen())
+  displayPGN = game.pgn()
+  moveStack.push(firstMoves[randomIdx]);
+  pgnArea.innerHTML = pgnHighlight(game.pgn());
+}
+
+
 
 updateStatus()
