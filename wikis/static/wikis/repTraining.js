@@ -2,8 +2,15 @@ import whiteRep from './white-rep.json' assert { type: 'json' };
 import blackRep from './black-rep.json' assert { type: 'json' };
 
 const pgnArea = document.querySelector(".pgn-viewer");
+const alertArea = document.querySelector(".alert-goes-here")
 
 var gameMode = "random";
+
+var myRep = whiteRep;
+
+if (playingColor == "b") {
+  myRep = blackRep;
+}
 
 var moveStack = [];
 var displayPGN = '';
@@ -19,23 +26,27 @@ function onDragStart (source, piece, position, orientation) {
   if (game.game_over()) return false
 
   // only pick up pieces for the side to move
-  if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-      (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+  if ((playingColor === 'w' && piece.search(/^b/) !== -1) ||
+      (playingColor === 'b' && piece.search(/^w/) !== -1)) {
     return false
   }
 }
 
-function getRandomMove () {
-  var possibleMoves = game.moves()
+function getRepMoves (rep) {
+  var candidates = []
 
-  // game over
-  if (possibleMoves.length === 0) return
+  if (game.fen() in rep) {
+    candidates = rep[game.fen()]
+  }
 
-  var randomIdx = Math.floor(Math.random() * possibleMoves.length)
-  return possibleMoves[randomIdx]
+  return candidates;
 }
 
 function onDrop (source, target) {
+  var suggestedMove = "";
+  if (game.fen() in myRep) {
+    suggestedMove = myRep[game.fen()][0][0];
+  }
   // see if the move is legal
   var move = game.move({
     from: source,
@@ -45,6 +56,15 @@ function onDrop (source, target) {
 
   // illegal move
   if (move === null) return 'snapback'
+
+  // move outside of repertoire
+  if (move.san != suggestedMove && suggestedMove != "") {
+    game.undo();
+    alertArea.innerHTML = '<div class="alert alert-danger mt-2" role="alert">Expected a move other than ' + move.san + '.</div>'
+    return 'snapback'
+  }
+
+  alertArea.innerHTML = ''
 
   updateStatus()
 }
@@ -102,7 +122,30 @@ function onSnapEnd () {
   board.position(game.fen())
   displayPGN = game.pgn()
   pgnArea.innerHTML = pgnHighlight(game.pgn());
-  console.log(game.fen())
+
+  var candidates = getRepMoves(myRep);
+  if (candidates.length != 0) {
+
+    var toMake = "";
+
+    if (gameMode == "random") {
+
+      var randomIdx = Math.floor(Math.random() * candidates.length)
+      toMake = candidates[randomIdx][0];
+
+    }
+
+    game.move(toMake);
+
+    // add to move log
+    const newDividedPGN = game.pgn().split(' ');
+    moveStack.push([newDividedPGN.at(-1), game.fen()]);
+    board.position(game.fen());
+    displayPGN = game.pgn()
+    pgnArea.innerHTML = pgnHighlight(game.pgn());
+  } else {
+    alertArea.innerHTML = '<div class="alert alert-success mt-2" role="alert">Reached end of variation!</div>'
+  }
 }
 
 function updateStatus () {
@@ -136,6 +179,10 @@ function updateStatus () {
   $status.html(status)
   $fen.html(game.fen())
   $pgn.html(game.pgn())
+}
+
+function onChange () {
+  console.log(game.fen())
 }
 
 function tempBack () {
@@ -188,7 +235,8 @@ var config = {
   position: 'start',
   onDragStart: onDragStart,
   onDrop: onDrop,
-  onSnapEnd: onSnapEnd
+  onSnapEnd: onSnapEnd,
+  // onChange: onChange
 }
 board = Chessboard('testBoard', config)
 
