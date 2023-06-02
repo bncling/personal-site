@@ -24,3 +24,19 @@ def black_rep_training(request):
 		return render(request, "chess/training.html", {"title": "Repertoire Training", "color": "b"})
 	else:
 		raise PermissionDenied
+
+
+@login_required
+def white_rep_editing(request):
+	if request.user.username == "benclingenpeel":
+		return render(request, "chess/opening_rep.html", {"title": "Repertoire Editing", "color": "w"})
+	else:
+		raise PermissionDenied
+
+
+@login_required
+def black_rep_editing(request):
+	if request.user.username == "benclingenpeel":
+		return render(request, "chess/opening_rep.html", {"title": "Repertoire Editing", "color": "b"})
+	else:
+		raise PermissionDenied
