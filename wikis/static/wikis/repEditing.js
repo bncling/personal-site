@@ -1,10 +1,19 @@
-// NOTE: this example uses the chess.js library:
-// https://github.com/jhlywa/chess.js
+import whiteRep from './white-rep.json' assert { type: 'json' };
+import blackRep from './black-rep.json' assert { type: 'json' };
+import testJSON from './test.json' assert { type: 'json' };
 
 const pgnArea = document.querySelector(".pgn-viewer");
+const moveArea = document.querySelector(".known-moves-here");
+const resetBtn = document.querySelector(".reset-button");
 
 var moveStack = [];
 var displayPGN = '';
+
+var myRep = whiteRep;
+
+if (playingColor == "b") {
+  myRep = blackRep;
+}
 
 var board = null
 var game = new Chess()
@@ -21,16 +30,6 @@ function onDragStart (source, piece, position, orientation) {
       (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
     return false
   }
-}
-
-function getRandomMove () {
-  var possibleMoves = game.moves()
-
-  // game over
-  if (possibleMoves.length === 0) return
-
-  var randomIdx = Math.floor(Math.random() * possibleMoves.length)
-  return possibleMoves[randomIdx]
 }
 
 function onDrop (source, target) {
@@ -74,6 +73,16 @@ function pgnHighlight (pgn) {
   }
 
   return highlighted;
+}
+
+function getRepMoves (rep) {
+  var candidates = []
+
+  if (game.fen() in rep) {
+    candidates = rep[game.fen()]
+  }
+
+  return candidates;
 }
 
 // update the board position after the piece snap
@@ -136,7 +145,7 @@ function updateStatus () {
 }
 
 function onChange (oldPos, newPos) {
-	console.log(moveStack);
+	console.log(getRepMoves(myRep));
 }
 
 function tempBack () {
@@ -167,8 +176,24 @@ function tempForward () {
   }
 }
 
+function customReset() {
+  game.reset();
+  board.position(game.fen())
+  moveArea.innerHTML = "";
+  moveStack = [];
+  displayPGN = '';
+  pgnArea.innerHTML = "";
+}
+
 document.onkeydown = function(e) {
     switch (e.keyCode) {
+        case 9:
+            if (playingColor == "w") {
+              window.location.href = '/chess/black_repertoire_editing'
+            } else {
+              window.location.href = '/chess/white_repertoire_editing'
+            }
+            break;
         case 37:
             tempBack();
             console.log(game.fen());
@@ -182,6 +207,9 @@ document.onkeydown = function(e) {
         case 40:
             tempBack();
             break;
+        case 82:
+            customReset();
+            break;
     }
 };
 
@@ -191,8 +219,21 @@ var config = {
   onDragStart: onDragStart,
   onDrop: onDrop,
   onSnapEnd: onSnapEnd,
-  //onChange: onChange
+  onChange: onChange
 }
 board = Chessboard('testBoard', config)
 
 updateStatus()
+
+if (playingColor == "b") {
+  board.orientation("black");
+}
+
+moveArea.innerHTML = getRepMoves(myRep);
+
+resetBtn.addEventListener("click", evt => {
+  customReset();
+});
+
+
+
