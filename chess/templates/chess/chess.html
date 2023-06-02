@@ -1,4 +1,4 @@
-{% extends "wikis/base.html" %}
+{% extends "chess/base.html" %}
 {% load static %}
 {% block content %}
 	<!-- JQuery -->
@@ -19,10 +19,12 @@
   <section class="mt-5">
 		<div class="container">
 			<div class="row gx-5">
-				<div class="col-6" id="testBoard"></div>
-				<div class="col-6 bg-white border">
-					<h2 class="mx-3 mt-3"><b>PGN</b></h2>
-					<div class="pgn-viewer mx-3 mt-3"></div>
+				<div class="col-6">
+					<div id="testBoard"></div>
+				</div>
+				<div class="col-4 bg-white border">
+					<h4 class="mx-3 mt-3"><b>Current variation: </b></h4>
+					<div class="pgn-viewer mx-3 mt-2 mb-3"></div>
 				</div>
 			</div>
 		</div>
