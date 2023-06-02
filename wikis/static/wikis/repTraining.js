@@ -2,9 +2,24 @@ import whiteRep from './white-rep.json' assert { type: 'json' };
 import blackRep from './black-rep.json' assert { type: 'json' };
 
 const pgnArea = document.querySelector(".pgn-viewer");
-const alertArea = document.querySelector(".alert-goes-here")
+const alertArea = document.querySelector(".alert-goes-here");
+const randomBtn = document.querySelector(".random-vars");
+const weightedBtn = document.querySelector(".weighted-vars");
+const resetBtn = document.querySelector(".reset-button");
 
-var gameMode = "random";
+var gameMode = "weighted";
+
+randomBtn.addEventListener("click", evt => {
+  gameMode = "random";
+  randomBtn.className = 'btn btn-activegreen mb-2 btn-sm random-vars'
+  weightedBtn.className = 'btn btn-green mb-2 btn-sm weighted-vars'
+});
+
+weightedBtn.addEventListener("click", evt => {
+  gameMode = "weighted";
+  randomBtn.className = 'btn btn-green mb-2 btn-sm random-vars'
+  weightedBtn.className = 'btn btn-activegreen mb-2 btn-sm weighted-vars'
+});
 
 var myRep = whiteRep;
 
@@ -40,6 +55,19 @@ function getRepMoves (rep) {
   }
 
   return candidates;
+}
+
+function weightedChoice(candidates) {
+    var total = 0;
+    for (var i = 0; i < candidates.length; i++) {
+        total += candidates[i][2];
+    }
+    const randomNum = Math.random() * total;
+    var running = 0;
+    for (var i = 0; i < candidates.length; i++) {
+        running += candidates[i][2];
+        if ( randomNum < running ) return candidates[i]
+    }
 }
 
 function onDrop (source, target) {
@@ -133,6 +161,24 @@ function onSnapEnd () {
       var randomIdx = Math.floor(Math.random() * candidates.length)
       toMake = candidates[randomIdx][0];
 
+    } else {
+
+      var counts = {};
+      for (var i = 0; i < candidates.length; i++) {
+        counts[candidates[i][0]] = 0;
+      }
+
+      for (var i = 0; i < 1000; i++) {
+        counts[weightedChoice(candidates)[0]]++;
+      }
+
+      for (var mv in counts) {
+        counts[mv] = counts[mv] / 1000;
+      }
+
+      console.log(counts);
+
+      toMake = weightedChoice(candidates)[0];
     }
 
     game.move(toMake);
@@ -215,6 +261,13 @@ function tempForward () {
 
 document.onkeydown = function(e) {
     switch (e.keyCode) {
+        case 9:
+            if (playingColor == "w") {
+              window.location.href = '/chess/black_repertoire_training'
+            } else {
+              window.location.href = '/chess/white_repertoire_training'
+            }
+            break;
         case 37:
             tempBack();
             break;
@@ -227,8 +280,55 @@ document.onkeydown = function(e) {
         case 40:
             tempBack();
             break;
-    }
+        case 82:
+            customReset();
+            break;
+    } 
 };
+
+function makeFirstMove () {
+  var firstMoves = blackRep["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"]
+  var firstMove = ""
+  if (gameMode == "random") {
+    var randomIdx = Math.floor(Math.random() * firstMoves.length);
+    firstMove = firstMoves[randomIdx][0];
+  } else {
+    var counts = {};
+    for (var i = 0; i < firstMoves.length; i++) {
+      counts[firstMoves[i][0]] = 0;
+    }
+
+    for (var i = 0; i < 1000; i++) {
+      counts[weightedChoice(firstMoves)[0]]++;
+    }
+
+    for (var mv in counts) {
+      counts[mv] = counts[mv] / 1000;
+    }
+
+    console.log(counts);
+
+    firstMove = weightedChoice(firstMoves)[0];
+  }
+
+  game.move(firstMove)
+  board.position(game.fen())
+  displayPGN = game.pgn()
+  moveStack.push([firstMove, game.fen()]);
+  pgnArea.innerHTML = pgnHighlight(displayPGN);
+}
+
+function customReset() {
+  game.reset();
+  board.position(game.fen())
+  alertArea.innerHTML = "";
+  moveStack = [];
+  displayPGN = '';
+  pgnArea.innerHTML = "";
+  if (playingColor == "b") {
+    makeFirstMove();
+  }
+}
 
 var config = {
   draggable: true,
@@ -243,15 +343,12 @@ board = Chessboard('testBoard', config)
 if (playingColor == "b") {
   board.orientation("black");
 
-  var firstMoves = blackRep["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"]
-  var randomIdx = Math.floor(Math.random() * firstMoves.length);
-  var firstMove = firstMoves[randomIdx][0];
-  game.move(firstMove)
-  board.position(game.fen())
-  displayPGN = game.pgn()
-  moveStack.push(firstMoves[randomIdx]);
-  pgnArea.innerHTML = pgnHighlight(game.pgn());
+  makeFirstMove();
 }
+
+resetBtn.addEventListener("click", evt => {
+  customReset();
+});
 
 
 

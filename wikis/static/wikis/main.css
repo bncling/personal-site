@@ -3,7 +3,7 @@
   --main-background: #f4f9f5;
   --fun-green: #279055; 
   --chill-green: #519872;
-  --chill-darker: #418862;
+  --chill-darker: #3a7f5f;
   --chill-lighter: #a4c3b2;
   --secondary: rgba(4, 16, 9, .56); 
   --tertiary: rgba(4, 16, 9, .1);
@@ -60,6 +60,16 @@ ul {
 }
 
 .btn-green:hover {
+  color: var(--main-background);
+  background-color: var(--chill-darker);
+}
+
+.btn-activegreen {
+  color: var(--main-background);
+  background-color: var(--chill-darker);
+}
+
+.btn-activegreen:hover {
   color: var(--main-background);
   background-color: var(--chill-darker);
 }
