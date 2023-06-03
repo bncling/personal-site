@@ -85,6 +85,21 @@ function pgnHighlight (pgn) {
   return highlighted;
 }
 
+function addMoveToRep (newMove) {
+  var attemptedMove = game.undo();
+  const previousPosition = game.fen();
+  game.move(attemptedMove);
+  if (previousPosition in newRep) {
+    newRep[previousPosition].push(newMove);
+    if (!(game.fen() in newRep) || (newRep[game.fen()].length == 0)) {
+      newRep[game.fen()] = [];
+    }
+  } else {
+    newRep[previousPosition] = [newMove];
+    newRep[game.fen()] = [];
+  }
+}
+
 function getRepMoves (rep) {
   var candidates = []
 
@@ -151,15 +166,51 @@ function onSnapEnd () {
     }
   }
 
+  var attemptedMove = game.undo();
+  const previousPosition = game.fen();
+  game.move(attemptedMove);
+
   if (game.history({verbose: true}).at(-1).promotion == 'q') {
     var promotionType = prompt("Enter q, r, n, or b for promotion type: ");
     if (!['q', 'r', 'n', 'b'].includes(promotionType)) {
       promotionType = 'q';
     }
-    var attemptedMove = game.undo();
     attemptedMove.promotion = promotionType;
-    game.move(attemptedMove);
   } 
+
+  const previouslySeen = newRep[previousPosition];
+  var notPreviouslySeen = false
+  if (previouslySeen) {
+    notPreviouslySeen = true
+    for (var i = 0; i < previouslySeen.length; i++) {
+      if (previouslySeen[i][0] == attemptedMove.san) {
+        notPreviouslySeen = false;
+        break;
+      }
+    }
+  }
+
+  if (!(game.fen() in newRep) || (
+      (game.fen() in newRep) &&
+      (previousPosition in newRep) &&
+      (notPreviouslySeen)
+    )) {
+    var newMove = [dividedPGN.at(-1), game.fen()]
+    if (game.turn() == playingColor) {
+      var newWeight = "weight";
+      while (!(Number(newWeight) >= 0)) {
+        newWeight = prompt("Add new move with weight: ");
+      }
+      if (newWeight > 0) {
+        newMove.push(Number(newWeight));
+        addMoveToRep(newMove);
+      } 
+    } else {
+      if (confirm("Add new move: ")) {
+        addMoveToRep(newMove);
+      } 
+    }
+  }
 
   board.position(game.fen())
   pgnArea.innerHTML = pgnHighlight(displayPGN);
@@ -199,7 +250,7 @@ function updateStatus () {
 }
 
 function onChange (oldPos, newPos) {
-	displayKnownMoves();
+  displayKnownMoves();
 }
 
 function tempBack () {
@@ -230,7 +281,7 @@ function tempForward () {
   }
 }
 
-function customReset() {
+function customReset () {
   game.reset();
   board.position(game.fen())
   savedArea.innerHTML = "";

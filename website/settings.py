@@ -180,3 +180,12 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 LOGIN_REDIRECT_URL = "homepage"
 LOGIN_URL = "login"
+
+
+if DEBUG:
+    MIDDLEWARE = [
+        'whitenoise.middleware.WhiteNoiseMiddleware',
+    ] + MIDDLEWARE
+    INSTALLED_APPS = [
+        'whitenoise.runserver_nostatic',
+    ] + INSTALLED_APPS

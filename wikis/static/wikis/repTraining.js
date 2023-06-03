@@ -176,8 +176,6 @@ function onSnapEnd () {
         counts[mv] = counts[mv] / 1000;
       }
 
-      console.log(counts);
-
       toMake = weightedChoice(candidates)[0];
     }
 
@@ -305,8 +303,6 @@ function makeFirstMove () {
     for (var mv in counts) {
       counts[mv] = counts[mv] / 1000;
     }
-
-    console.log(counts);
 
     firstMove = weightedChoice(firstMoves)[0];
   }

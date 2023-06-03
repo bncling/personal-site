@@ -13,13 +13,13 @@
 					<div id="testBoard"></div>
 				</div>
 				<div class="col-4">
+					<button class="btn btn-green mb-2 btn-sm delete-from">Delete from position</button>
+					<button class="btn btn-green mb-2 btn-sm reset-button"><b><i class="bi bi-arrow-counterclockwise" style="color: var(--main-background);"></i></b></button>
 					<form action="{% url 'save-rep' %}" method="POST">
 						{% csrf_token %}
 						<input hidden id="json-data-here" name="data" value="test"></input>
-						<input class="btn btn-green mb-2 btn-sm save-var" type="submit" value="Save added moves"></input>
+						<input class="btn btn-green mb-2 btn-sm save-var" type="submit" value="Save changes to repertoire"></input>
 					</form>
-					<button class="btn btn-green mb-2 btn-sm delete-from">Delete from this position</button>
-					<button class="btn btn-green mb-2 btn-sm reset-button"><b><i class="bi bi-arrow-counterclockwise" style="color: var(--main-background);"></i></b></button>
 					<div class="bg-white border">
 						<h4 class="mx-3 mt-3"><b>Current variation:</b></h4>
 						<div class="pgn-viewer mx-3 mt-2 mb-3"></div>
