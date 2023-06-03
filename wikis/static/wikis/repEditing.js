@@ -85,6 +85,20 @@ function getRepMoves (rep) {
   return candidates;
 }
 
+function displayKnownMoves() {
+  const turnNum = Math.floor(game.history().length / 2) + 1;
+  const knownMoves = getRepMoves(myRep);
+  var modifier = ".";
+  if (game.turn() == "b") {
+    modifier += "..";
+  }
+  var movesToShow = '<p>';
+  for (var i = 0; i < knownMoves.length; i++) {
+    movesToShow += turnNum + modifier + ' ' + knownMoves[i][0] + '<br>';
+  }
+  moveArea.innerHTML = movesToShow;
+}
+
 // update the board position after the piece snap
 // for castling, en passant, pawn promotion
 function onSnapEnd () {
@@ -145,7 +159,7 @@ function updateStatus () {
 }
 
 function onChange (oldPos, newPos) {
-	console.log(getRepMoves(myRep));
+	displayKnownMoves();
 }
 
 function tempBack () {
@@ -226,10 +240,10 @@ board = Chessboard('testBoard', config)
 updateStatus()
 
 if (playingColor == "b") {
-  board.orientation("black");
+  board.orientation("black")
 }
 
-moveArea.innerHTML = getRepMoves(myRep);
+displayKnownMoves();
 
 resetBtn.addEventListener("click", evt => {
   customReset();
