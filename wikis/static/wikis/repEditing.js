@@ -19,11 +19,7 @@ if (playingColor == "b") {
   myRep = blackRep;
 }
 
-console.log(myRep);
-console.log(testJSON)
-
 var newRep = structuredClone(myRep);
-newRep["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"].push(["c4", "rnbqkbnr/pppppppp/8/8/2P5/8/PP1PPPPP/RNBQKBNR b KQkq c3 0 1", 3]);
 
 var board = null
 var game = new Chess()
@@ -102,14 +98,14 @@ function getRepMoves (rep) {
 function displayKnownMoves() {
   const turnNum = Math.floor(game.history().length / 2) + 1;
   const movesKnown = getRepMoves(myRep);
-  var knownMoves = [];
+  var knownMoves = {};
   for (var i = 0; i < movesKnown.length; i++) {
-    knownMoves.push(movesKnown[i][0]);
+    knownMoves[movesKnown[i][0]] = movesKnown[i][2];
   }
   const movesAdded = getRepMoves(newRep);
-  var addedMoves = [];
+  var addedMoves = {};
   for (var i = 0; i < movesAdded.length; i++) {
-    addedMoves.push(movesAdded[i][0]);
+    addedMoves[movesAdded[i][0]] = movesAdded[i][2];
   }
   var modifier = ".";
   if (game.turn() == "b") {
@@ -117,9 +113,9 @@ function displayKnownMoves() {
   }
   var addedToShow = '<p>';
   var savedToShow = '<p>';
-  for (var i = 0; i < addedMoves.length; i++) {
-    var moveString = turnNum + modifier + ' ' + addedMoves[i] + '<br>';
-    if (knownMoves.includes(addedMoves[i])) {
+  for (var moveSan in addedMoves) {
+    var moveString = '<b>' + turnNum + modifier + moveSan + '</b> - (' + addedMoves[moveSan] + ')<br>';
+    if (moveSan in knownMoves) {
       savedToShow += moveString;
     } else {
       addedToShow += moveString;

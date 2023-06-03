@@ -16,7 +16,7 @@
 					<form action="{% url 'save-rep' %}" method="POST">
 						{% csrf_token %}
 						<input hidden id="json-data-here" name="data" value="test"></input>
-						<input class="btn btn-green mb-2 btn-sm save-var" type="submit" value="Save variation"></input>
+						<input class="btn btn-green mb-2 btn-sm save-var" type="submit" value="Save added moves"></input>
 					</form>
 					<button class="btn btn-green mb-2 btn-sm delete-from">Delete from this position</button>
 					<button class="btn btn-green mb-2 btn-sm reset-button"><b><i class="bi bi-arrow-counterclockwise" style="color: var(--main-background);"></i></b></button>
