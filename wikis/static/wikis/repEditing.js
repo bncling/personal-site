@@ -3,7 +3,8 @@ import blackRep from './black-rep.json' assert { type: 'json' };
 import testJSON from './test.json' assert { type: 'json' };
 
 const pgnArea = document.querySelector(".pgn-viewer");
-const moveArea = document.querySelector(".known-moves-here");
+const savedArea = document.querySelector(".known-moves-here");
+const addedArea = document.querySelector(".added-moves-here");
 const resetBtn = document.querySelector(".reset-button");
 
 var moveStack = [];
@@ -14,6 +15,9 @@ var myRep = whiteRep;
 if (playingColor == "b") {
   myRep = blackRep;
 }
+
+var newRep = structuredClone(myRep);
+newRep["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"].push(["c4", "rnbqkbnr/pppppppp/8/8/2P5/8/PP1PPPPP/RNBQKBNR b KQkq c3 0 1", 3]);
 
 var board = null
 var game = new Chess()
@@ -87,16 +91,32 @@ function getRepMoves (rep) {
 
 function displayKnownMoves() {
   const turnNum = Math.floor(game.history().length / 2) + 1;
-  const knownMoves = getRepMoves(myRep);
+  const movesKnown = getRepMoves(myRep);
+  var knownMoves = [];
+  for (var i = 0; i < movesKnown.length; i++) {
+    knownMoves.push(movesKnown[i][0]);
+  }
+  const movesAdded = getRepMoves(newRep);
+  var addedMoves = [];
+  for (var i = 0; i < movesAdded.length; i++) {
+    addedMoves.push(movesAdded[i][0]);
+  }
   var modifier = ".";
   if (game.turn() == "b") {
     modifier += "..";
   }
-  var movesToShow = '<p>';
-  for (var i = 0; i < knownMoves.length; i++) {
-    movesToShow += turnNum + modifier + ' ' + knownMoves[i][0] + '<br>';
+  var addedToShow = '<p>';
+  var savedToShow = '<p>';
+  for (var i = 0; i < addedMoves.length; i++) {
+    var moveString = turnNum + modifier + ' ' + addedMoves[i] + '<br>';
+    if (knownMoves.includes(addedMoves[i])) {
+      savedToShow += moveString;
+    } else {
+      addedToShow += moveString;
+    }
   }
-  moveArea.innerHTML = movesToShow;
+  savedArea.innerHTML = savedToShow;
+  addedArea.innerHTML = addedToShow;
 }
 
 // update the board position after the piece snap
@@ -106,8 +126,18 @@ function onSnapEnd () {
   const dividedPGN = game.pgn().split(' ');
   if (currentLength == moveStack.length) {
     moveStack.push([dividedPGN.at(-1), game.fen()]);
+    displayPGN = game.pgn();
   } else {
-    moveStack.splice(currentLength, moveStack.length - currentLength, [dividedPGN.at(-1), game.fen()]);
+    var followingPGN = true;
+    for (var i = 0; i < currentLength + 1; i++) {
+      if (game.history()[i] != moveStack[i][0]) {
+        followingPGN = false
+      }
+    }
+    if (followingPGN == false) {
+      moveStack.splice(currentLength, moveStack.length - currentLength, [dividedPGN.at(-1), game.fen()]);
+      displayPGN = game.pgn();
+    }
   }
 
   if (game.history({verbose: true}).at(-1).promotion == 'q') {
@@ -121,8 +151,7 @@ function onSnapEnd () {
   } 
 
   board.position(game.fen())
-  displayPGN = game.pgn()
-  pgnArea.innerHTML = pgnHighlight(game.pgn());
+  pgnArea.innerHTML = pgnHighlight(displayPGN);
 }
 
 function updateStatus () {
@@ -193,10 +222,11 @@ function tempForward () {
 function customReset() {
   game.reset();
   board.position(game.fen())
-  moveArea.innerHTML = "";
+  savedArea.innerHTML = "";
   moveStack = [];
   displayPGN = '';
   pgnArea.innerHTML = "";
+  displayKnownMoves();
 }
 
 document.onkeydown = function(e) {
@@ -210,7 +240,6 @@ document.onkeydown = function(e) {
             break;
         case 37:
             tempBack();
-            console.log(game.fen());
             break;
         case 38:
             tempForward();
