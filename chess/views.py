@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+
+import json
 
 @login_required
 def chess(request):
@@ -52,7 +54,10 @@ def black_rep_editing(request):
 def save_rep(request):
 	if request.user.username == "benclingenpeel":
 		if request.method == "POST":
-			print(request.POST["data"])
-			return render(request, "chess/chess.html")
+			data = json.loads(request.POST["data"])
+			redirection_view = white_rep_editing
+			if data["color"] == "b":
+				redirection_view = black_rep_editing
+			return redirect(redirection_view)
 	else:
 		raise PermissionDenied

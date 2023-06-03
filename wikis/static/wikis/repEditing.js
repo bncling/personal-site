@@ -30,7 +30,7 @@ var $pgn = $('#pgn')
 
 function saveRep() {
   console.log("penis")
-  jsonArea.value = JSON.stringify({"color": playingColor, "rep": "newRep"});
+  jsonArea.value = JSON.stringify({"color": playingColor, "rep": newRep});
 }
 
 function onDragStart (source, piece, position, orientation) {
