@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 
 import json
+from pathlib import Path
 
 @login_required
 def chess(request):
@@ -56,8 +57,13 @@ def save_rep(request):
 		if request.method == "POST":
 			data = json.loads(request.POST["data"])
 			redirection_view = white_rep_editing
+			path_ending = "white-rep.json"
 			if data["color"] == "b":
 				redirection_view = black_rep_editing
+				path_ending = "black-rep.json"
+			rep_path = str(Path(__file__).parents[1]) + "/wikis/static/wikis/" + path_ending
+			with open(rep_path, "w") as f:
+				json.dump(data["rep"], f)
 			return redirect(redirection_view)
 	else:
 		raise PermissionDenied

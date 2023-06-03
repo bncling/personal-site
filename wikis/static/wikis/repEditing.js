@@ -19,6 +19,9 @@ if (playingColor == "b") {
   myRep = blackRep;
 }
 
+console.log(myRep);
+console.log(testJSON)
+
 var newRep = structuredClone(myRep);
 newRep["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"].push(["c4", "rnbqkbnr/pppppppp/8/8/2P5/8/PP1PPPPP/RNBQKBNR b KQkq c3 0 1", 3]);
 
@@ -29,7 +32,6 @@ var $fen = $('#fen')
 var $pgn = $('#pgn')
 
 function saveRep() {
-  console.log("penis")
   jsonArea.value = JSON.stringify({"color": playingColor, "rep": newRep});
 }
 
