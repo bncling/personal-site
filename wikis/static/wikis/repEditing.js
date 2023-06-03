@@ -114,7 +114,12 @@ function displayKnownMoves() {
   var addedToShow = '<p>';
   var savedToShow = '<p>';
   for (var moveSan in addedMoves) {
-    var moveString = '<b>' + turnNum + modifier + moveSan + '</b> - (' + addedMoves[moveSan] + ')<br>';
+    var moveString = '';
+    if (addedMoves[moveSan]) {
+      moveString = '<b>' + turnNum + modifier + moveSan + '</b> - (' + addedMoves[moveSan] + ')<br>';
+    } else {
+      moveString = '<b>' + turnNum + modifier + moveSan + '</b><br>';
+    }
     if (moveSan in knownMoves) {
       savedToShow += moveString;
     } else {
