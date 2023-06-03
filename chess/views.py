@@ -29,7 +29,10 @@ def black_rep_training(request):
 @login_required
 def white_rep_editing(request):
 	if request.user.username == "benclingenpeel":
-		return render(request, "chess/opening_rep.html", {"title": "Repertoire Editing", "color": "w"})
+		return render(request, "chess/opening_rep.html", {
+			"title": "Repertoire Editing",
+			"color": "w"
+		})
 	else:
 		raise PermissionDenied
 
@@ -37,6 +40,19 @@ def white_rep_editing(request):
 @login_required
 def black_rep_editing(request):
 	if request.user.username == "benclingenpeel":
-		return render(request, "chess/opening_rep.html", {"title": "Repertoire Editing", "color": "b"})
+		return render(request, "chess/opening_rep.html", {
+			"title": "Repertoire Editing",
+			"color": "b"
+		})
+	else:
+		raise PermissionDenied
+
+
+@login_required
+def save_rep(request):
+	if request.user.username == "benclingenpeel":
+		if request.method == "POST":
+			print(request.POST["data"])
+			return render(request, "chess/chess.html")
 	else:
 		raise PermissionDenied

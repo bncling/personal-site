@@ -3,6 +3,7 @@
 {% block content %}
 	<!-- Custom JS for logic -->
   <script>var playingColor = '{{ color }}'</script>
+  <script>var saveURL = "{% url 'save-rep' %}"</script>
   <script type="module" src="{% static 'wikis/repEditing.js' %}"></script>
 
   <section class="mt-5">
@@ -12,7 +13,11 @@
 					<div id="testBoard"></div>
 				</div>
 				<div class="col-4">
-					<button class="btn btn-green mb-2 btn-sm save-var">Save variation</button>
+					<form action="{% url 'save-rep' %}" method="POST">
+						{% csrf_token %}
+						<input hidden id="json-data-here" name="data" value="test"></input>
+						<input class="btn btn-green mb-2 btn-sm save-var" type="submit" value="Save variation"></input>
+					</form>
 					<button class="btn btn-green mb-2 btn-sm delete-from">Delete from this position</button>
 					<button class="btn btn-green mb-2 btn-sm reset-button"><b><i class="bi bi-arrow-counterclockwise" style="color: var(--main-background);"></i></b></button>
 					<div class="bg-white border">

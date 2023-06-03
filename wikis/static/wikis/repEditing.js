@@ -5,6 +5,9 @@ import testJSON from './test.json' assert { type: 'json' };
 const pgnArea = document.querySelector(".pgn-viewer");
 const savedArea = document.querySelector(".known-moves-here");
 const addedArea = document.querySelector(".added-moves-here");
+const jsonArea = document.getElementById("json-data-here");
+const deleteBtn = document.querySelector(".delete-from");
+const saveBtn = document.querySelector(".save-var");
 const resetBtn = document.querySelector(".reset-button");
 
 var moveStack = [];
@@ -24,6 +27,11 @@ var game = new Chess()
 var $status = $('#status')
 var $fen = $('#fen')
 var $pgn = $('#pgn')
+
+function saveRep() {
+  console.log("penis")
+  jsonArea.value = JSON.stringify({"color": playingColor, "rep": "newRep"});
+}
 
 function onDragStart (source, piece, position, orientation) {
   // do not pick up pieces if the game is over
@@ -274,9 +282,19 @@ if (playingColor == "b") {
 
 displayKnownMoves();
 
+deleteBtn.addEventListener("click", evt => {
+  console.log("delete button pressed");
+});
+
+saveBtn.addEventListener("click", evt => {
+  saveRep();
+});
+
 resetBtn.addEventListener("click", evt => {
   customReset();
 });
+
+
 
 
 
