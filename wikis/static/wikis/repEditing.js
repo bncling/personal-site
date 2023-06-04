@@ -20,6 +20,7 @@ if (playingColor == "b") {
 }
 
 var newRep = structuredClone(myRep);
+var deletedMoves = [];
 
 var board = null
 var game = new Chess()
@@ -100,6 +101,18 @@ function addMoveToRep (newMove) {
   }
 }
 
+function deleteSubsequentMoves (rep, startFEN) {
+  var stack = [ startFEN ];
+
+  while (stack.length > 0) {
+    const current = stack.pop();
+    deletedMoves.push(current)
+    for (let neighbor of rep[current]) {
+      stack.push(neighbor[1])
+    }
+  }
+}
+
 function getRepMoves (rep) {
   var candidates = []
 
@@ -115,12 +128,12 @@ function displayKnownMoves() {
   const movesKnown = getRepMoves(myRep);
   var knownMoves = {};
   for (var i = 0; i < movesKnown.length; i++) {
-    knownMoves[movesKnown[i][0]] = movesKnown[i][2];
+    knownMoves[movesKnown[i][0]] = [movesKnown[i][2], (deletedMoves.includes(movesKnown[i][1]))];
   }
   const movesAdded = getRepMoves(newRep);
   var addedMoves = {};
   for (var i = 0; i < movesAdded.length; i++) {
-    addedMoves[movesAdded[i][0]] = movesAdded[i][2];
+    addedMoves[movesAdded[i][0]] = [movesAdded[i][2], (deletedMoves.includes(movesAdded[i][1]))];
   }
   var modifier = ".";
   if (game.turn() == "b") {
@@ -129,16 +142,25 @@ function displayKnownMoves() {
   var addedToShow = '<p>';
   var savedToShow = '<p>';
   for (var moveSan in addedMoves) {
+    var prefix = '';
+    var postfix = '';
+    if (addedMoves[moveSan][1]) {
+      prefix = '<span style="color: var(--danger-red);">';
+      postfix = '</span>';
+    }
+    console.log(addedMoves[moveSan])
     var moveString = '';
-    if (addedMoves[moveSan]) {
-      moveString = '<b>' + turnNum + modifier + moveSan + '</b> - (' + addedMoves[moveSan] + ')<br>';
+    if (addedMoves[moveSan][0]) {
+      moveString = '<b>' + turnNum + modifier + moveSan + '</b> - (' + addedMoves[moveSan][0] + ')<br>';
     } else {
-      moveString = '<b>' + turnNum + modifier + moveSan + '</b><br>';
+      moveString = '<b>' + turnNum + modifier + moveSan +'</b><br>';
     }
     if (moveSan in knownMoves) {
-      savedToShow += moveString;
+      savedToShow += prefix + moveString + postfix;
     } else {
-      addedToShow += moveString;
+      if (!(addedMoves[moveSan][1])) {
+        addedToShow += moveString;
+      }
     }
   }
   savedArea.innerHTML = savedToShow;
@@ -337,7 +359,8 @@ if (playingColor == "b") {
 displayKnownMoves();
 
 deleteBtn.addEventListener("click", evt => {
-  console.log("delete button pressed");
+  deleteSubsequentMoves(newRep, game.fen());
+  displayKnownMoves();
 });
 
 saveBtn.addEventListener("click", evt => {
@@ -347,7 +370,6 @@ saveBtn.addEventListener("click", evt => {
 resetBtn.addEventListener("click", evt => {
   customReset();
 });
-
 
 
 
