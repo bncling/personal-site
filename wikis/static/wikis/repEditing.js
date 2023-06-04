@@ -119,10 +119,14 @@ function deleteMovesFromRep (rep) {
     delete rep[deletedMove];
   }
   for (var position in rep) {
+    var toRemove = [];
     for (var i = 0; i < rep[position].length; i++) {
       if (deletedMoves.includes(rep[position][i][1])) {
-        rep[position].pop(i);
+        toRemove.push(i);
       }
+    }
+    for (var i = 0; i < toRemove.length; i++) {
+      rep[position].splice(toRemove[i], 1);
     }
   }
 }
@@ -146,7 +150,6 @@ function displayKnownMoves() {
   }
   const movesAdded = getRepMoves(newRep);
   movesAdded.sort(function(a, b){return b[2] - a[2]});
-  console.log(movesAdded)
   var addedMoves = {};
   for (var i = 0; i < movesAdded.length; i++) {
     addedMoves[movesAdded[i][0]] = [movesAdded[i][2], (deletedMoves.includes(movesAdded[i][1]))];
