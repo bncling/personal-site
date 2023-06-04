@@ -145,6 +145,8 @@ function displayKnownMoves() {
     knownMoves[movesKnown[i][0]] = [movesKnown[i][2], (deletedMoves.includes(movesKnown[i][1]))];
   }
   const movesAdded = getRepMoves(newRep);
+  movesAdded.sort(function(a, b){return b[2] - a[2]});
+  console.log(movesAdded)
   var addedMoves = {};
   for (var i = 0; i < movesAdded.length; i++) {
     addedMoves[movesAdded[i][0]] = [movesAdded[i][2], (deletedMoves.includes(movesAdded[i][1]))];
