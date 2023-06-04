@@ -29,6 +29,7 @@ var $fen = $('#fen')
 var $pgn = $('#pgn')
 
 function saveRep() {
+  deleteMovesFromRep(newRep);
   jsonArea.value = JSON.stringify({"color": playingColor, "rep": newRep});
 }
 
@@ -113,6 +114,19 @@ function deleteSubsequentMoves (rep, startFEN) {
   }
 }
 
+function deleteMovesFromRep (rep) {
+  for (let deletedMove of deletedMoves) {
+    delete rep[deletedMove];
+  }
+  for (var position in rep) {
+    for (var i = 0; i < rep[position].length; i++) {
+      if (deletedMoves.includes(rep[position][i][1])) {
+        rep[position].pop(i);
+      }
+    }
+  }
+}
+
 function getRepMoves (rep) {
   var candidates = []
 
@@ -148,7 +162,6 @@ function displayKnownMoves() {
       prefix = '<span style="color: var(--danger-red);">';
       postfix = '</span>';
     }
-    console.log(addedMoves[moveSan])
     var moveString = '';
     if (addedMoves[moveSan][0]) {
       moveString = '<b>' + turnNum + modifier + moveSan + '</b> - (' + addedMoves[moveSan][0] + ')<br>';
