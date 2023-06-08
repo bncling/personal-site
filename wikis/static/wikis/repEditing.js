@@ -26,7 +26,6 @@ var newRep = structuredClone(myRep);
 var deletedMoves = [];
 
 var currentSquare = '';
-var currentPiece = '';
 var squaresClicked = [];
 
 var board = null
@@ -54,7 +53,6 @@ function onDragStart (source, piece, position, orientation) {
 }
 
 function onDrop (source, target) {
-  console.log("being called")
   // see if the move is legal
   var move = game.move({
     from: source,
@@ -72,8 +70,6 @@ function onDrop (source, target) {
 
 function onMouseoverSquare (square, piece) {
   currentSquare = square;
-  currentPiece = piece;
-  console.log(squaresClicked);
 }
 
 function pgnHighlight (pgn) {
@@ -478,9 +474,7 @@ boardArea.addEventListener("click", evt => {
 
 document.addEventListener("click", evt => {
   if (squaresClicked.length == 2) {
-    console.log("move to be made");
     if (!onDrop(squaresClicked[0], squaresClicked[1])) {
-      console.log("valid move");
         onSnapEnd();
     } else {
       squaresClicked = [];

@@ -6,6 +6,7 @@ const alertArea = document.querySelector(".alert-goes-here");
 const randomBtn = document.querySelector(".random-vars");
 const weightedBtn = document.querySelector(".weighted-vars");
 const resetBtn = document.querySelector(".reset-button");
+const boardArea = document.getElementById("testBoard");
 
 var gameMode = "weighted";
 
@@ -36,6 +37,9 @@ var $status = $('#status')
 var $fen = $('#fen')
 var $pgn = $('#pgn')
 
+var currentSquare = '';
+var squaresClicked = [];
+
 function onDragStart (source, piece, position, orientation) {
   // do not pick up pieces if the game is over
   if (game.game_over()) return false
@@ -45,6 +49,8 @@ function onDragStart (source, piece, position, orientation) {
       (playingColor === 'b' && piece.search(/^w/) !== -1)) {
     return false
   }
+
+  squaresClicked.push(source);
 }
 
 function getRepMoves (rep) {
@@ -96,9 +102,15 @@ function onDrop (source, target) {
     }
   }
 
+  squaresClicked = [];
+
   alertArea.innerHTML = ''
 
   updateStatus()
+}
+
+function onMouseoverSquare (square, piece) {
+  currentSquare = square;
 }
 
 function pgnHighlight (pgn) {
@@ -336,6 +348,7 @@ var config = {
   onDragStart: onDragStart,
   onDrop: onDrop,
   onSnapEnd: onSnapEnd,
+  onMouseoverSquare: onMouseoverSquare,
   // onChange: onChange
 }
 board = Chessboard('testBoard', config)
@@ -349,6 +362,23 @@ if (playingColor == "b") {
 resetBtn.addEventListener("click", evt => {
   customReset();
 });
+
+boardArea.addEventListener("click", evt => {
+  squaresClicked.push(currentSquare);
+});
+
+document.addEventListener("click", evt => {
+  if (squaresClicked.length == 2) {
+    if (!onDrop(squaresClicked[0], squaresClicked[1])) {
+        onSnapEnd();
+    } else {
+      squaresClicked = [];
+    }
+  }
+});
+
+
+
 
 
 
