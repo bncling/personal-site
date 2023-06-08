@@ -79,7 +79,7 @@ function onDrop (source, target) {
   var move = game.move({
     from: source,
     to: target,
-    promotion: 'q'
+    promotion: "q"
   })
 
   // illegal move
@@ -87,9 +87,13 @@ function onDrop (source, target) {
 
   // move outside of repertoire
   if (move.san != suggestedMove && suggestedMove != "") {
-    game.undo();
-    alertArea.innerHTML = '<div class="alert alert-danger mt-2" role="alert">Expected a move other than ' + move.san + '.</div>'
-    return 'snapback'
+    if (game.history({verbose: true}).at(-1).promotion == 'q') {
+      console.log("promotion exceptions made...")
+    } else {
+      game.undo();
+      alertArea.innerHTML = '<div class="alert alert-danger mt-2" role="alert">Expected a move other than ' + move.san + '.</div>'
+      return 'snapback'
+    }
   }
 
   alertArea.innerHTML = ''

@@ -190,6 +190,21 @@ function displayKnownMoves() {
 // update the board position after the piece snap
 // for castling, en passant, pawn promotion
 function onSnapEnd () {
+  var attemptedMove = game.undo();
+  game.move(attemptedMove);
+
+  if (game.history({verbose: true}).at(-1).promotion == 'q') {
+    var promotionType = prompt("Enter q, r, n, or b for promotion type: ");
+    if (!['q', 'r', 'n', 'b'].includes(promotionType)) {
+      promotionType = 'q';
+    }
+    attemptedMove.promotion = promotionType;
+  } 
+
+  game.undo();
+  const previousPosition = game.fen();
+  game.move(attemptedMove);
+
   const currentLength = game.history().length - 1;
   const dividedPGN = game.pgn().split(' ');
   if (currentLength == moveStack.length) {
@@ -208,17 +223,6 @@ function onSnapEnd () {
     }
   }
 
-  var attemptedMove = game.undo();
-  const previousPosition = game.fen();
-  game.move(attemptedMove);
-
-  if (game.history({verbose: true}).at(-1).promotion == 'q') {
-    var promotionType = prompt("Enter q, r, n, or b for promotion type: ");
-    if (!['q', 'r', 'n', 'b'].includes(promotionType)) {
-      promotionType = 'q';
-    }
-    attemptedMove.promotion = promotionType;
-  } 
 
   const previouslySeen = newRep[previousPosition];
   var notPreviouslySeen = false
@@ -257,16 +261,23 @@ function onSnapEnd () {
   board.position(game.fen())
   pgnArea.innerHTML = pgnHighlight(displayPGN);
   if (previousPosition in newRep) {
+    var hasMove = true;
     if (game.turn() == playingColor) {
+      hasMove = false;
       for (let potentialMove of newRep[previousPosition]) {
         if (potentialMove[0] == attemptedMove.san) {
+          hasMove = true;
           variationProbability *= potentialMove[2] / 100;
         }
       }
     }
-    variationArea.innerHTML = "<b>Current variation (" + String(Math.floor(10000 * variationProbability) / 100) + "%):</b>";
+    if (hasMove) {
+      variationArea.innerHTML = "<b>Current variation (" + String(Math.floor(10000 * variationProbability) / 100) + "%):</b>";
+    } else {
+      variationArea.innerHTML = "<b>Current variation:</b>";
+    }
   } else {
-    variationArea.innerHTML = "<b>Current variation:</b>"
+    variationArea.innerHTML = "<b>Current variation:</b>";
   }
 }
 
@@ -331,9 +342,22 @@ function tempBack () {
 
 function tempForward () {
   if (game.fen() == "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
-    game.move(moveStack.at(0)[0]);
+    const toMake = String(moveStack.at(0)[0]);
+    if (game.turn() != playingColor) {
+      for (let potentialMove of newRep[game.fen()]) {
+        if (potentialMove[0] == toMake) {
+          variationProbability *= potentialMove[2] / 100;
+        }
+      }
+    }
+    game.move(toMake);
     board.position(game.fen());
     pgnArea.innerHTML = pgnHighlight(displayPGN);
+    if (game.fen() in newRep) {
+      variationArea.innerHTML = "<b>Current variation (" + String(Math.floor(10000 * variationProbability) / 100) + "%):</b>";
+    } else {
+      variationArea.innerHTML = "<b>Current variation:</b>"
+    }
   } else {
     for (var i = 0; i < moveStack.length; i++) {
       if (moveStack.at(i)[1] === game.fen()) {
