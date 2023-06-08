@@ -67,3 +67,11 @@ def save_rep(request):
 			return redirect(redirection_view)
 	else:
 		raise PermissionDenied
+
+
+@login_required
+def guess_vars(request): 
+	if request.user.username == "benclingenpeel":
+		return render(request, "chess/guess_variations.html", {"title": "Guess Variations"})
+	else:
+		raise PermissionDenied
