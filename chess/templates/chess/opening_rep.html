@@ -8,11 +8,11 @@
 
   <section class="mt-5">
 		<div class="container">
-			<div class="row gx-5">
+			<div class="row gx-4">
 				<div class="col-6">
 					<div id="testBoard"></div>
 				</div>
-				<div class="col-4">
+				<div class="col-3">
 					<button class="btn btn-green mb-2 btn-sm delete-from">Delete from position</button>
 					<button class="btn btn-green mb-2 btn-sm reset-button"><b><i class="bi bi-arrow-counterclockwise" style="color: var(--main-background);"></i></b></button>
 					<form action="{% url 'save-rep' %}" method="POST">
@@ -31,6 +31,12 @@
 					<div class="bg-white border mt-2">
 						<h4 class="mx-3 mt-3"><b>Added moves: </b></h4>
 						<div class="added-moves-here mx-3 mt-2 mb-3"></div>
+					</div>
+				</div>
+				<div class="col-2">
+					<div class="bg-white border">
+						<h4 class="mx-3 mt-3"><b>In prep at</b></h4>
+						<div class="probabilities-here mx-3 mt-2 mb-3"></div>
 					</div>
 				</div>
 			</div>

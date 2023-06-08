@@ -11,6 +11,7 @@ const deleteBtn = document.querySelector(".delete-from");
 const saveBtn = document.querySelector(".save-var");
 const resetBtn = document.querySelector(".reset-button");
 const boardArea = document.getElementById("testBoard");
+const probArea = document.querySelector(".probabilities-here");
 
 var moveStack = [];
 var displayPGN = '';
@@ -37,6 +38,32 @@ var $pgn = $('#pgn')
 function saveRep() {
   deleteMovesFromRep(newRep);
   jsonArea.value = JSON.stringify({"color": playingColor, "rep": newRep});
+}
+
+function getStatistics (position, rep, plyNum, depth) {
+  var weightedSum = 0;
+  if (rep[position].length == 0) {
+    return 0.0;
+  } else if (plyNum == depth) {
+    for (let neighbor of rep[position]) {
+      if (neighbor.length == 3) {
+        weightedSum += (neighbor[2] / 100);
+      } else { 
+        return 1.0;
+      }
+    } 
+  } else {
+    for (let neighbor of rep[position]) {
+      var likelihood = 100
+      if (neighbor.length == 3) {
+        likelihood = neighbor[2]
+      }
+      const weight = getStatistics(neighbor[1], rep, plyNum + 1, depth);
+      weightedSum += (likelihood / 100) * weight;
+    }
+  }
+
+  return weightedSum;
 }
 
 function onDragStart (source, piece, position, orientation) {
@@ -114,6 +141,8 @@ function addMoveToRep (newMove) {
     newRep[previousPosition] = [newMove];
     newRep[game.fen()] = [];
   }
+
+  displayProbabilities();
 }
 
 function deleteSubsequentMoves (rep, startFEN) {
@@ -143,6 +172,8 @@ function deleteMovesFromRep (rep) {
       rep[position].splice(toRemove[i], 1);
     }
   }
+
+  displayProbabilities();
 }
 
 function getRepMoves (rep) {
@@ -197,6 +228,14 @@ function displayKnownMoves() {
   }
   savedArea.innerHTML = savedToShow;
   addedArea.innerHTML = addedToShow;
+}
+
+function displayProbabilities () {
+  var probString = ''
+  for (var i = 0; i < 10; i++) {
+    probString += '<small><b>Turn ' + (i + 1) + ': </b>' + Math.floor(getStatistics("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", newRep, 0, 2*i + 1) * 1000000) / 10000 + "%</small><br>";
+  }
+  probArea.innerHTML = probString;
 }
 
 // update the board position after the piece snap
@@ -454,6 +493,8 @@ if (playingColor == "b") {
 }
 
 displayKnownMoves();
+
+displayProbabilities();
 
 deleteBtn.addEventListener("click", evt => {
   deleteSubsequentMoves(newRep, game.fen());
