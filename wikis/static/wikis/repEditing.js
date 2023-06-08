@@ -10,6 +10,7 @@ const jsonArea = document.getElementById("json-data-here");
 const deleteBtn = document.querySelector(".delete-from");
 const saveBtn = document.querySelector(".save-var");
 const resetBtn = document.querySelector(".reset-button");
+const boardArea = document.getElementById("testBoard");
 
 var moveStack = [];
 var displayPGN = '';
@@ -23,6 +24,10 @@ if (playingColor == "b") {
 
 var newRep = structuredClone(myRep);
 var deletedMoves = [];
+
+var currentSquare = '';
+var currentPiece = '';
+var squaresClicked = [];
 
 var board = null
 var game = new Chess()
@@ -44,9 +49,12 @@ function onDragStart (source, piece, position, orientation) {
       (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
     return false
   }
+
+  squaresClicked.push(source);
 }
 
 function onDrop (source, target) {
+  console.log("being called")
   // see if the move is legal
   var move = game.move({
     from: source,
@@ -57,7 +65,15 @@ function onDrop (source, target) {
   // illegal move
   if (move === null) return 'snapback'
 
+  squaresClicked = [];
+
   updateStatus()
+}
+
+function onMouseoverSquare (square, piece) {
+  currentSquare = square;
+  currentPiece = piece;
+  console.log(squaresClicked);
 }
 
 function pgnHighlight (pgn) {
@@ -428,7 +444,8 @@ var config = {
   onDragStart: onDragStart,
   onDrop: onDrop,
   onSnapEnd: onSnapEnd,
-  onChange: onChange
+  onChange: onChange,
+  onMouseoverSquare: onMouseoverSquare
 }
 board = Chessboard('testBoard', config)
 
@@ -453,6 +470,22 @@ saveBtn.addEventListener("click", evt => {
 
 resetBtn.addEventListener("click", evt => {
   customReset();
+});
+
+boardArea.addEventListener("click", evt => {
+  squaresClicked.push(currentSquare);
+});
+
+document.addEventListener("click", evt => {
+  if (squaresClicked.length == 2) {
+    console.log("move to be made");
+    if (!onDrop(squaresClicked[0], squaresClicked[1])) {
+      console.log("valid move");
+        onSnapEnd();
+    } else {
+      squaresClicked = [];
+    }
+  }
 });
 
 
