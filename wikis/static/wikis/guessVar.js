@@ -1,8 +1,11 @@
 import whiteRep from './white-rep.json' assert { type: 'json' };
 import blackRep from './black-rep.json' assert { type: 'json' };
 
+const boardArea = document.getElementById("startBoard");
+const resetBtn = document.querySelector(".reset-button");
 const alertArea = document.querySelector(".alert-goes-here");
 
+var myRep = whiteRep;
 var moveStack = [];
 
 var board = null
@@ -10,6 +13,15 @@ var game = new Chess()
 var $status = $('#status')
 var $fen = $('#fen')
 var $pgn = $('#pgn')
+
+var currentSquare = '';
+var squaresClicked = [];
+
+var goalPosition = '';
+
+function onMouseoverSquare (square, piece) {
+  currentSquare = square;
+}
 
 function getRandomPosition (rep) {
   const randomNum = Object.keys(rep).length * Math.random();
@@ -22,6 +34,30 @@ function getRandomPosition (rep) {
   }
 }
 
+function getRepMoves (rep) {
+  var candidates = []
+
+  if (game.fen() in rep) {
+    candidates = rep[game.fen()]
+  }
+
+  return candidates;
+}
+
+function existsPath(rep, fen1, fen2) {
+  if (fen1 == fen2) {
+    return true;
+  } else {
+    for (let neighbor of rep[fen1]) {
+      if (existsPath(rep, neighbor[1], fen2)) {
+        return true
+      }
+    }
+  }
+  return false
+}
+
+
 function onDragStart (source, piece, position, orientation) {
   // do not pick up pieces if the game is over
   if (game.game_over()) return false
@@ -31,9 +67,21 @@ function onDragStart (source, piece, position, orientation) {
       (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
     return false
   }
+
+  squaresClicked.push(source);
 }
 
 function onDrop (source, target) {
+  const repMoves = getRepMoves(myRep);
+  var suggestedMoves = [];
+  if (game.fen() in myRep) {
+    for (var i = 0; i < repMoves.length; i++) {
+      if (existsPath(myRep, repMoves[i][1], goalPosition)) {
+        suggestedMoves.push(repMoves[i][0]);
+      }
+    }
+  }
+
   // see if the move is legal
   var move = game.move({
     from: source,
@@ -43,6 +91,19 @@ function onDrop (source, target) {
 
   // illegal move
   if (move === null) return 'snapback'
+
+  if (!(suggestedMoves.includes(move.san)) && (suggestedMoves != [])) {
+    if (game.history({verbose: true}).at(-1).promotion == 'q') {
+      console.log("promotion exceptions made...")
+    } else {
+      game.undo();
+      alertArea.innerHTML = '<div class="alert alert-danger mt-2" role="alert">Expected a move other than ' + move.san + '.</div>'
+      return 'snapback'
+    }
+  }
+
+  squaresClicked = [];
+  alertArea.innerHTML = ''
 
   updateStatus()
 }
@@ -69,6 +130,9 @@ function onSnapEnd () {
   } 
 
   board.position(game.fen())
+  if (game.fen() == goalPosition) {
+    alertArea.innerHTML = '<div class="alert alert-success mt-2" role="alert">Reached the goal position!</div>'
+  }
 }
 
 function updateStatus () {
@@ -104,12 +168,30 @@ function updateStatus () {
   $pgn.html(game.pgn())
 }
 
+function customReset() {
+  var playingColor = Math.floor(2 * Math.random());
+  if (playingColor == 0) {
+    myRep = whiteRep;
+    finalBoard.orientation("white");
+    board.orientation("white");
+  } else {
+    myRep = blackRep;
+    finalBoard.orientation("black");
+    board.orientation("black");
+  }
+  game.reset()
+  goalPosition = getRandomPosition(myRep);
+  board.position(game.fen());
+  finalBoard.position(goalPosition);
+  alertArea.innerHTML = "";
+  moveStack = [];
+}
+
 function tempBack () {
   for (var i = 0; i < moveStack.length; i++) {
     if (moveStack.at(i)[1] == game.fen()) {
       game.undo();
       board.position(game.fen());
-      pgnArea.innerHTML = pgnHighlight(displayPGN);
     }
   }
 }
@@ -118,14 +200,12 @@ function tempForward () {
   if (game.fen() == "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
     game.move(moveStack.at(0)[0]);
     board.position(game.fen());
-    pgnArea.innerHTML = pgnHighlight(displayPGN);
   } else {
     for (var i = 0; i < moveStack.length; i++) {
       if (moveStack.at(i)[1] === game.fen()) {
         const toMake = String(moveStack.at(i + 1)[0]);
         game.move(toMake);
         board.position(game.fen());
-        pgnArea.innerHTML = pgnHighlight(displayPGN);
         break;
       }
     }
@@ -136,7 +216,6 @@ document.onkeydown = function(e) {
     switch (e.keyCode) {
         case 37:
             tempBack();
-            console.log(game.fen());
             break;
         case 38:
             tempForward();
@@ -147,6 +226,9 @@ document.onkeydown = function(e) {
         case 40:
             tempBack();
             break;
+        case 82:
+            customReset();
+            break;
     }
 };
 
@@ -155,7 +237,8 @@ var config = {
   position: 'start',
   onDragStart: onDragStart,
   onDrop: onDrop,
-  onSnapEnd: onSnapEnd
+  onSnapEnd: onSnapEnd,
+  onMouseoverSquare: onMouseoverSquare
 }
 
 var board = Chessboard("startBoard", config)
@@ -163,9 +246,23 @@ var finalBoard = Chessboard("finishedBoard", "start");
 
 updateStatus()
 
-finalBoard.position(getRandomPosition(whiteRep));
+goalPosition = getRandomPosition(myRep);
+finalBoard.position(goalPosition);
 
-alertArea.innerHTML = '<div class="alert alert-danger mt-2" role="alert">Expected a move.</div>'
+boardArea.addEventListener("click", evt => {
+  squaresClicked.push(currentSquare);
+});
 
+document.addEventListener("click", evt => {
+  if (squaresClicked.length == 2) {
+    if (!onDrop(squaresClicked[0], squaresClicked[1])) {
+        onSnapEnd();
+    } else {
+      squaresClicked = [];
+    }
+  }
+});
 
-
+resetBtn.addEventListener("click", evt => {
+  customReset();
+});
