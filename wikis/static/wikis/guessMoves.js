@@ -62,21 +62,8 @@ function setTestPosition (rep) {
       foundPosition = true;
     }
   }
+  console.log(movesToGuess)
 }
-
-function existsPath(rep, fen1, fen2) {
-  if (fen1 == fen2) {
-    return true;
-  } else {
-    for (let neighbor of rep[fen1]) {
-      if (existsPath(rep, neighbor[1], fen2)) {
-        return true
-      }
-    }
-  }
-  return false
-}
-
 
 function onDragStart (source, piece, position, orientation) {
   // do not pick up pieces if the game is over
@@ -118,7 +105,6 @@ function onDrop (source, target) {
       return 'snapback'
     } else {
       movesToDisplay.push(move.san);
-      console.log(movesToDisplay)
     }
   } else {
     if (move.san != repMoves[0][0]) {
@@ -174,8 +160,10 @@ function onSnapEnd () {
   board.position(game.fen())
 
   if ((movesToDisplay.length == movesToGuess.length) && (game.turn() != playingColor)) {
-    console.log("here")
     alertArea.innerHTML = '<div class="alert alert-success mt-2" role="alert">Found all moves!</div>'
+  } else if (game.turn() != playingColor) {
+    game.load(testPosition);
+    board.position(game.fen());
   }
 }
 
@@ -213,21 +201,23 @@ function updateStatus () {
 }
 
 function customReset() {
-  playingColor = Math.floor(2 * Math.random());
-  if (playingColor == 0) {
+  movesToGuess = [];
+  movesToDisplay = [];
+  const numberColor = Math.floor(2 * Math.random());
+  if (numberColor == 0) {
+    playingColor = 'w';
     myRep = whiteRep;
-    finalBoard.orientation("white");
     board.orientation("white");
   } else {
+    playingColor = 'b';
     myRep = blackRep;
-    finalBoard.orientation("black");
     board.orientation("black");
   }
   game.reset()
-  goalPosition = getRandomPosition(myRep);
+  setTestPosition(myRep);
   board.position(game.fen());
-  finalBoard.position(goalPosition);
   alertArea.innerHTML = "";
+  moveArea.innerHTML = "";
   moveStack = [];
 }
 
@@ -271,7 +261,7 @@ document.onkeydown = function(e) {
             tempBack();
             break;
         case 82:
-            //customReset();
+            customReset();
             break;
     }
 };
