@@ -75,3 +75,14 @@ def guess_vars(request):
 		return render(request, "chess/guess_variations.html", {"title": "Guess Variations"})
 	else:
 		raise PermissionDenied
+
+
+@login_required
+def guess_moves(request):
+	if request.user.username == "benclingenpeel":
+		return render(request, "chess/guess_moves.html", {"title": "Guess Moves"})
+	else:
+		raise PermissionDenied
+
+
+

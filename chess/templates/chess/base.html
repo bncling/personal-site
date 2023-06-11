@@ -64,9 +64,13 @@
 		      			<li><a class="dropdown-item" id="#black" href="{% url 'black-editing' %}">As Black</a></li>
 		      		</ul>
 	      		</li>
-	          <li class="nav-item">
-	          	<a class="nav-link" href="{% url 'guess-variations' %}">Guess Variations</a>
-	          </li>
+	      		<li class="nav-item dropdown">
+	      			<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button">Guess</a>
+		      		<ul class="dropdown-menu">
+		      			<li><a class="dropdown-item" id="#white" href="{% url 'guess-variations' %}">Variations</a></li>
+		      			<li><a class="dropdown-item" id="#black" href="{% url 'guess-moves' %}">Next Moves</a></li>
+		      		</ul>
+	      		</li>
 	        </ul>
 	      </div>
 	     </div>
