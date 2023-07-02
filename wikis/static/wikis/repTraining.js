@@ -1,11 +1,12 @@
 import whiteRep from './white-rep.json' assert { type: 'json' };
 import blackRep from './black-rep.json' assert { type: 'json' };
 
-const pgnArea = document.querySelector(".pgn-viewer");
+//const pgnArea = document.querySelector(".pgn-viewer");
 const alertArea = document.querySelector(".alert-goes-here");
 const randomBtn = document.querySelector(".random-vars");
 const weightedBtn = document.querySelector(".weighted-vars");
 const resetBtn = document.querySelector(".reset-button");
+const setBtn = document.querySelector(".set-fen-button");
 const boardArea = document.getElementById("testBoard");
 
 var gameMode = "weighted";
@@ -30,6 +31,7 @@ if (playingColor == "b") {
 
 var moveStack = [];
 var displayPGN = '';
+var startFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 var board = null
 var game = new Chess()
@@ -165,7 +167,7 @@ function onSnapEnd () {
 
   board.position(game.fen())
   displayPGN = game.pgn()
-  pgnArea.innerHTML = pgnHighlight(game.pgn());
+  //pgnArea.innerHTML = pgnHighlight(game.pgn());
 
   var candidates = getRepMoves(myRep);
   if (candidates.length != 0) {
@@ -202,7 +204,7 @@ function onSnapEnd () {
     moveStack.push([newDividedPGN.at(-1), game.fen()]);
     board.position(game.fen());
     displayPGN = game.pgn()
-    pgnArea.innerHTML = pgnHighlight(game.pgn());
+    //pgnArea.innerHTML = pgnHighlight(game.pgn());
   } else {
     alertArea.innerHTML = '<div class="alert alert-success mt-2" role="alert">Reached end of variation!</div>'
   }
@@ -250,23 +252,23 @@ function tempBack () {
     if (moveStack.at(i)[1] == game.fen()) {
       game.undo();
       board.position(game.fen());
-      pgnArea.innerHTML = pgnHighlight(displayPGN);
+      //pgnArea.innerHTML = pgnHighlight(displayPGN);
     }
   }
 }
 
 function tempForward () {
-  if (game.fen() == "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
+  if (game.fen() == startFEN) {
     game.move(moveStack.at(0)[0]);
     board.position(game.fen());
-    pgnArea.innerHTML = pgnHighlight(displayPGN);
+    //pgnArea.innerHTML = pgnHighlight(displayPGN);
   } else {
     for (var i = 0; i < moveStack.length; i++) {
       if (moveStack.at(i)[1] === game.fen()) {
         const toMake = String(moveStack.at(i + 1)[0]);
         game.move(toMake);
         board.position(game.fen());
-        pgnArea.innerHTML = pgnHighlight(displayPGN);
+        //pgnArea.innerHTML = pgnHighlight(displayPGN);
         break;
       }
     }
@@ -301,25 +303,12 @@ document.onkeydown = function(e) {
 };
 
 function makeFirstMove () {
-  var firstMoves = blackRep["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"]
+  var firstMoves = myRep[startFEN]
   var firstMove = ""
   if (gameMode == "random") {
     var randomIdx = Math.floor(Math.random() * firstMoves.length);
     firstMove = firstMoves[randomIdx][0];
   } else {
-    var counts = {};
-    for (var i = 0; i < firstMoves.length; i++) {
-      counts[firstMoves[i][0]] = 0;
-    }
-
-    for (var i = 0; i < 1000; i++) {
-      counts[weightedChoice(firstMoves)[0]]++;
-    }
-
-    for (var mv in counts) {
-      counts[mv] = counts[mv] / 1000;
-    }
-
     firstMove = weightedChoice(firstMoves)[0];
   }
 
@@ -327,17 +316,17 @@ function makeFirstMove () {
   board.position(game.fen())
   displayPGN = game.pgn()
   moveStack.push([firstMove, game.fen()]);
-  pgnArea.innerHTML = pgnHighlight(displayPGN);
+  //pgnArea.innerHTML = pgnHighlight(displayPGN);
 }
 
 function customReset() {
-  game.reset();
+  game.load(startFEN);
   board.position(game.fen())
   alertArea.innerHTML = "";
   moveStack = [];
   displayPGN = '';
-  pgnArea.innerHTML = "";
-  if (playingColor == "b") {
+  //pgnArea.innerHTML = "";
+  if (playingColor != game.turn()) {
     makeFirstMove();
   }
 }
@@ -355,9 +344,18 @@ board = Chessboard('testBoard', config)
 
 if (playingColor == "b") {
   board.orientation("black");
+}
 
+game.load(startFEN);
+
+if (playingColor != game.turn()) {
   makeFirstMove();
 }
+
+setBtn.addEventListener("click", evt => {
+  startFEN = game.fen();
+  customReset();
+})
 
 resetBtn.addEventListener("click", evt => {
   customReset();
