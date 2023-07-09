@@ -17,6 +17,7 @@ wikis/static/wikis/chessboard-1.0.0.js
 *.svg
 *.png
 *.JPG
+*.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
