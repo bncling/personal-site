@@ -12,6 +12,7 @@ const saveBtn = document.querySelector(".save-var");
 const resetBtn = document.querySelector(".reset-button");
 const boardArea = document.getElementById("testBoard");
 const probArea = document.querySelector(".probabilities-here");
+const fromPosArea = document.querySelector(".from-this-pos");
 
 var moveStack = [];
 var displayPGN = '';
@@ -236,6 +237,11 @@ function displayProbabilities () {
     probString += '<small><b>Turn ' + (i + 1) + ': </b>' + Math.floor(getStatistics("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", newRep, 0, 2*i + 1) * 1000000) / 10000 + "%</small><br>";
   }
   probArea.innerHTML = probString;
+  var probString2 = ''
+  for (var i = 0; i < 5; i++) {
+    probString2 += '<small><b>In ' + (i + 1) + ' moves: </b>' + Math.floor(getStatistics(game.fen(), newRep, 0, 2*i + 1) * 1000000) / 10000 + "%</small><br>";
+  }
+  fromPosArea.innerHTML = probString2;
 }
 
 // update the board position after the piece snap
@@ -367,6 +373,9 @@ function updateStatus () {
 
 function onChange (oldPos, newPos) {
   displayKnownMoves();
+  if (game.fen() in newRep) {
+    displayProbabilities();
+  }
 }
 
 function tempBack () {
