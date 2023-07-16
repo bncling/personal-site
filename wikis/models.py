@@ -40,3 +40,13 @@ class MathBook(models.Model):
 
 	def __str__(self):
 		return self.title
+
+
+class SecretPhoto(models.Model):
+	title = models.CharField(max_length = 200)
+	date = models.DateTimeField(default = timezone.now)
+	image_link = models.TextField()
+	description = models.TextField()
+
+	def __str__(self):
+		return self.title

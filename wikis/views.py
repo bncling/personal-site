@@ -9,7 +9,7 @@ from django.views.generic import (
 	UpdateView,
 	DeleteView
 )
-from .models import Wiki, Post, MathBook
+from .models import Wiki, Post, MathBook, SecretPhoto
 
 # Create your views here.
 def homepage(request):
@@ -155,3 +155,16 @@ class TextbookListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 		if self.request.user.username == "benclingenpeel":
 			return True
 		return False
+
+
+class SecretPhotoListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+	model = SecretPhoto
+	template_name = "wikis/secret.html"
+	context_object_name = "photos"
+	ordering = ["date"]
+
+	def test_func(self):
+		if self.request.user.username in ["benclingenpeel", "nina"]:
+			return True
+		else:
+			return False

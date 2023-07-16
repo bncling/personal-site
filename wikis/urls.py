@@ -28,6 +28,6 @@ urlpatterns = [
 	path("posts/<slug:slug>/update/", views.PostUpdateView.as_view(), name = "post-update"),
 	path("posts/<slug:slug>/delete/", views.PostDeleteView.as_view(), name = "post-delete"),
 	path("problems_and_solutions/", views.TextbookListView.as_view(), name = "problems"),
-	path("secret/", views.secret, name = "secret"),
+	path("secret/", views.SecretPhotoListView.as_view(), name = "secret"),
 	path("chess/", include("chess.urls"))
 ]
